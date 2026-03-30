@@ -9,11 +9,6 @@ html, body {
     font-size: 1.5rem;
 }
 
-img.cube_card_img {
-    width: 100%;
-    max-width: 120px;
-}
-
 .no_cases_selected {
 }
 .some_cases_selected {
