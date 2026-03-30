@@ -3,9 +3,9 @@ import {computed, reactive, ref, watch} from "vue";
 import {random_element} from "@/helpers/helpers";
 import {makeScramble} from "@/helpers/scramble_utils"
 
-const statsKey = 'zbll_stats_array';
+const statsKey = 'ltct_stats_array';
 const initialStats = JSON.parse(localStorage.getItem(statsKey)) || []
-const storeKey = 'zbll_store';
+const storeKey = 'ltct_store';
 
 const initialStore = JSON.parse(localStorage.getItem(storeKey)) || {
     // array of keys selected

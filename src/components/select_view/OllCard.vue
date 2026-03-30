@@ -2,7 +2,6 @@
 
 import {useSelectedStore} from "@/stores/SelectedStore";
 import {computed, onMounted, ref} from "vue";
-import {getOllImg} from "@/helpers/cube_images";
 import CollCard from "@/components/select_view/CollCard.vue";
 
 const props = defineProps(['oll'])
@@ -50,8 +49,8 @@ onMounted(() => {
       </div>
       <i class="bi bi-caret-down opacity-75 caret" :class="isCollapsed ? '' : 'upside_down'"></i>
     </div>
-    <div class="clickable m-1 text-center" @click="onCardClicked">
-      <img class="cube_card_img" :src="getOllImg(oll)" :alt="oll">
+    <div class="clickable m-1 text-center py-2" @click="onCardClicked">
+      <span class="fs-2 fw-bold">{{ oll }}</span>
     </div>
   </div>
   <div

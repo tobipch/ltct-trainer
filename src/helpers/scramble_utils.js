@@ -1,10 +1,19 @@
 import {random_element, shuffle} from "@/helpers/helpers";
-import zbll_map_next from "@/assets/zbll_map_next.json"
+import ltct_map from "@/assets/ltct_map.json"
 
 export const makeScramble = (zbllKey, preferredLength) => {
   if (!zbllKey) return ""
-  const scramblesMap = zbll_map_next[zbllKey]["scrambles"] // {"13": [scrambles], "14": [scrambles], …}
+  const entry = ltct_map[zbllKey]
+  const scramblesMap = entry["scrambles"] // {"13": [scrambles], "14": [scrambles], …}
   const lengthVariations = Object.keys(scramblesMap)
+
+  // If no pre-generated scrambles, fall back to inverse of first algorithm
+  if (lengthVariations.length === 0) {
+    const algs = entry["algs"]
+    if (!algs || algs.length === 0) return ""
+    return inverseScramble(algs[0])
+  }
+
   preferredLength = `${preferredLength}` // to string
   const choosenLength = lengthVariations.includes(preferredLength) ? preferredLength : lengthVariations[0]
   return applyRotationButLessB(random_element(scramblesMap[choosenLength]));
