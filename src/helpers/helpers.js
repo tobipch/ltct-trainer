@@ -11,10 +11,10 @@ export const shuffle = arr => {
     return arr;
 }
 
-// "H RLFF OsA" -> "H-RLFF O/A"
+// "UU UFL LUB" -> "UU-UFL LUB"
 export const formatZbllKey = key => {
-    const [oll, coll, zbll] = key.split(' ');
-    return `${oll}-${coll} ${zbll.replace('s', '/')}`;
+    const [group, target, twist] = key.split(' ');
+    return `${group}-${target} ${twist}`;
 }
 
 export function areSetsEqual(setA, setB) {

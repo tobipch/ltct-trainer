@@ -1,28 +1,32 @@
 <script setup>
-import zbll_map_next from "@/assets/zbll_map_next.json"
+import ltct_map from "@/assets/ltct_map.json"
 import {computed} from "vue";
 import {inverseScramble} from "@/helpers/scramble_utils";
 const props = defineProps(['zbllKey', 'maxAmount']);
 
-const suggestedAlgs = computed(() => zbll_map_next[props.zbllKey].algs.slice(0, props.maxAmount))
-const setup = computed(() => inverseScramble(zbll_map_next[props.zbllKey].algs[0]))
+const algs = computed(() => ltct_map[props.zbllKey].algs)
+const suggestedAlgs = computed(() => algs.value.slice(0, props.maxAmount))
+const setup = computed(() => algs.value.length > 0 ? inverseScramble(algs.value[0]) : '')
 
 </script>
 
 <template>
-  <div>{{ $t("result_card.setup_moves") }}: <strong>{{setup}}</strong></div>
-  <div class="mt-2">{{ $t("result_card.algorithms_collection") }}:</div>
-  <div>
-    <ul>
-      <li
-          v-for="(alg, i) in suggestedAlgs"
-          :key="alg"
-          :class="i === 0 ? 'fw-bold' : ''"
-      >
-        {{alg}}
-      </li>
-    </ul>
-  </div>
+  <template v-if="algs.length > 0">
+    <div>{{ $t("result_card.setup_moves") }}: <strong>{{setup}}</strong></div>
+    <div class="mt-2">{{ $t("result_card.algorithms_collection") }}:</div>
+    <div>
+      <ul>
+        <li
+            v-for="(alg, i) in suggestedAlgs"
+            :key="alg"
+            :class="i === 0 ? 'fw-bold' : ''"
+        >
+          {{alg}}
+        </li>
+      </ul>
+    </div>
+  </template>
+  <div v-else class="text-muted">No algorithm available</div>
 
 </template>
 

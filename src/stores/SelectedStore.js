@@ -1,12 +1,12 @@
 import {computed, reactive, watch} from 'vue'
 import { defineStore } from 'pinia'
-import zbll_map_next from "@/assets/zbll_map_next.json"
+import ltct_map from "@/assets/ltct_map.json"
 
-const localStoreKey = "currentZbllArray";
+const localStoreKey = "currentLtctArray";
 const loadedArray = JSON.parse(localStorage.getItem(localStoreKey) || "[]")
 
 export const useSelectedStore = defineStore('selected', () => {
-  const allZbllKeysArray = Object.keys(zbll_map_next)
+  const allZbllKeysArray = Object.keys(ltct_map)
 
   const store = reactive({
     keys: loadedArray,
@@ -15,7 +15,9 @@ export const useSelectedStore = defineStore('selected', () => {
   const commonScrambleLength = computed(() => {
     let result = 0
     store.keys.forEach(key => {
-      const minLength = parseInt(Object.keys(zbll_map_next[key].scrambles)[0]) // shortest always comes first in map
+      const scrambleKeys = Object.keys(ltct_map[key].scrambles)
+      if (scrambleKeys.length === 0) return
+      const minLength = parseInt(scrambleKeys[0])
       result = Math.max(result, minLength)
     })
     return result
