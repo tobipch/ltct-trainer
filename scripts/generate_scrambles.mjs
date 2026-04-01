@@ -47,7 +47,14 @@ function generatePremoves(n) {
 }
 
 function invertMoves(movesStr) {
-  return new Alg(movesStr).invert().toString();
+  return new Alg(movesStr).invert().toString().replace(/(\w)2'/g, "$12");
+}
+
+function normalizeNotation(str) {
+  return str
+    .replace(/(\w)2'/g, "$12")   // U2' → U2
+    .replace(/(\w)3'/g, "$1")    // U3' → U (3 inverse quarter turns = 1 forward)
+    .replace(/(\w)3/g, "$1'");   // U3 → U' (3 forward quarter turns = 1 inverse)
 }
 
 function moveCount(scrambleStr) {
@@ -65,11 +72,12 @@ async function generateOneScramble(kpuzzle, inverseAlgStr, solve) {
 
     // Solve the state
     const solution = await solve(pattern);
-    const inverseSolution = solution.invert().toString();
 
     // Scramble = premoves + inverse(solution)
-    // Simplify by parsing through Alg to cancel redundant moves
-    const scramble = new Alg(premoves + " " + inverseSolution).toString();
+    // Use experimentalSimplify to cancel adjacent same-face moves, fix X2' notation
+    const rawAlg = new Alg(premoves).concat(solution.invert());
+    const simplified = rawAlg.experimentalSimplify({ cancel: true });
+    const scramble = normalizeNotation(simplified.toString());
 
     if (moveCount(scramble) >= MIN_LENGTH) {
       return scramble;
@@ -81,7 +89,9 @@ async function generateOneScramble(kpuzzle, inverseAlgStr, solve) {
   const inversePremoves = invertMoves(premoves);
   const pattern = kpuzzle.defaultPattern().applyAlg(new Alg(inversePremoves + " " + inverseAlgStr));
   const solution = await solve(pattern);
-  return new Alg(premoves + " " + solution.invert().toString()).toString();
+  const rawAlg = new Alg(premoves).concat(solution.invert());
+  const simplified = rawAlg.experimentalSimplify({ cancel: true });
+  return normalizeNotation(simplified.toString());
 }
 
 async function main() {
