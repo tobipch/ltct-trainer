@@ -1,6 +1,7 @@
 <script setup>
 import {useSettingsStore, fontsList} from "@/stores/SettingsStore";
 import ThemesSelect from "@/components/ThemesSelect.vue";
+import LetterSchemeEditor from "@/components/LetterSchemeEditor.vue";
 import {defaultDarkName, defaultLightName, useThemeStore} from "@/stores/ThemeStore";
 import {useI18n} from 'vue-i18n'
 import {useDisplayStore} from "@/stores/DisplayStore";
@@ -115,6 +116,13 @@ const onResetBtnClicked = () => {
 <!--          TODO add "R' U R", "R' U' R'", "Random R" and "Random/ALL"-->
         </select>
       </div>
+
+      <hr>
+      <div class="mb-3">
+        <label class="form-label fw-bold">{{ $t("settings.letter_scheme") }}</label>
+        <LetterSchemeEditor />
+      </div>
+      <hr>
 
       <div class="mb-2">
         <label for="DarkTheme" class="form-label">{{ $t("settings.dark_theme") }}</label>
