@@ -65,18 +65,6 @@ const onResetBtnClicked = () => {
         </select>
       </div>
 
-      <div class="mb-2">
-        <label for="pictureView" class="form-label">{{ $t("settings.zbll_pictures_view") }}</label>
-        <select
-            v-model="settings.store.pictureView"
-            class="mx-2"
-            tabindex="-1" @keydown.space.prevent=""
-            id="pictureView">
-
-          <option value="3D">{{ $t("settings.zbll_pictures_side") }}</option>
-          <option value="top">{{ $t("settings.zbll_pictures_top") }}</option>
-        </select>
-      </div>
 
       <div class="mb-2">
         <label for="timerUpdate" class="form-label">{{ $t("settings.timer_update") }}</label>

@@ -1,11 +1,10 @@
 <script setup>
 import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
-import {useSettingsStore} from "@/stores/SettingsStore";
-import { SVG } from "sr-puzzlegen"
+import { TwistyPlayer } from "cubing/twisty";
 
 const props = defineProps(['scramble'])
-const cubeImgDiv = ref(null)
-const settings = useSettingsStore()
+const containerDiv = ref(null)
+let player = null
 
 const windowWidth = ref(window.innerWidth || document.documentElement.clientWidth)
 const windowHeight = ref(window.innerHeight || document.documentElement.clientHeight)
@@ -29,47 +28,57 @@ const cubePictureSize = computed(() => {
     }
   }
 
-  return 250; // default (big) size
+  return 250;
 })
 
-const insertSvg = () => {
-  const isTopView = settings.store.pictureView === "top"
-  cubeImgDiv.value.innerHTML = ''
+const createPlayer = () => {
+  if (player) {
+    player.remove()
+    player = null
+  }
 
-  const opts = {
-    "puzzle": {
-      "alg": props.scramble,
-    },
-    "width": cubePictureSize.value,
-    "height": cubePictureSize.value,
-  }
-  if (!isTopView) {
-    opts.puzzle.rotations = [{"x":38,"y":45,"z":29}]
-    opts.puzzle.mask = {
-      "F": [3,4,5,6,7,8],
-      "B": [3,4,5,6,7,8],
-      "R": [3,4,5,6,7,8],
-      "L": [3,4,5,6,7,8],
-      "D": [0,1,2,3,4,5,6,7,8]
-    }
-  }
-  const visualizerType = isTopView ? "cube-top" : "cube"
-  SVG(cubeImgDiv.value, visualizerType, opts)
+  if (!props.scramble || !containerDiv.value) return
+
+  player = new TwistyPlayer({
+    puzzle: "3x3x3",
+    alg: props.scramble,
+    visualization: "3D",
+    hintFacelets: "none",
+    backView: "none",
+    background: "none",
+    controlPanel: "none",
+    experimentalDragInput: "auto",
+  })
+
+  player.style.width = `${cubePictureSize.value}px`
+  player.style.height = `${cubePictureSize.value}px`
+  containerDiv.value.appendChild(player)
 }
 
-watch(() => props.scramble, insertSvg)
-watch(() => settings.store.pictureView, insertSvg)
-watch(() => cubePictureSize.value, insertSvg)
-onMounted(() => {
-  window.addEventListener('resize', updateDimensions);
-  insertSvg()
+watch(() => props.scramble, createPlayer)
+watch(() => cubePictureSize.value, () => {
+  if (player) {
+    player.style.width = `${cubePictureSize.value}px`
+    player.style.height = `${cubePictureSize.value}px`
+  }
 })
-onBeforeUnmount(() =>  window.removeEventListener('resize', updateDimensions) )
 
+onMounted(() => {
+  window.addEventListener('resize', updateDimensions)
+  createPlayer()
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateDimensions)
+  if (player) {
+    player.remove()
+    player = null
+  }
+})
 </script>
 
 <template>
-  <div ref="cubeImgDiv"></div>
+  <div ref="containerDiv"></div>
 </template>
 
 <style scoped>
