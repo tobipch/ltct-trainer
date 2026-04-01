@@ -1,2 +1,2 @@
 # LTCT trainer
-## Fork of [Roman Strakhov's ZBLL Trainer](https://github.com/Roman-/zbll)
+## Forked from [Roman Strakhov's ZBLL Trainer](https://github.com/Roman-/zbll) with permission
