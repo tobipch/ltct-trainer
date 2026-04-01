@@ -4,8 +4,9 @@ import {TimerState, useSessionStore} from "@/stores/SessionStore";
 import {msToHumanReadable} from "@/helpers/time_formatter";
 import {useSelectedStore} from "@/stores/SelectedStore";
 import {useSettingsStore} from "@/stores/SettingsStore";
-import {formatZbllKey} from "@/helpers/helpers";
+import {formatZbllKey, parseLtctKey} from "@/helpers/helpers";
 import {usePresetsStore, starredName} from "@/stores/PresetStore";
+import {useLetterSchemeStore} from "@/stores/LetterSchemeStore";
 import { useI18n } from 'vue-i18n'
 import CubePicture from "@/components/timer/CubePicture.vue";
 import SetupAndAlgs from "@/components/timer/SetupAndAlgs.vue";
@@ -16,6 +17,7 @@ const sessionStore = useSessionStore()
 const selectedStore = useSelectedStore()
 const settings = useSettingsStore()
 const presets = usePresetsStore()
+const ls = useLetterSchemeStore()
 const isValid = computed(() => sessionStore.stats().length > sessionStore.observingResult)
 const result = computed(() => {
       return isValid.value
@@ -39,6 +41,8 @@ watch(isSelectedCheckboxValue, (doSelect) => {
   }
 })
 watch(isSelected, () => isSelectedCheckboxValue.value = isSelected.value)
+
+const parsed = computed(() => parseLtctKey(result.value["key"], ls.toLetter))
 
 const isBookmarked = computed(() => presets.hasCase(starredName, result.value.key))
 const bookmarkIconClass = computed(() => isBookmarked.value ? "bi-star-fill text-info" : "bi-star text-primary")
@@ -75,7 +79,8 @@ const starClicked = () => {
       <hr class="my-2 my-sm-3">
       <p class="card-text my-0 my-sm-1">
         <span class="d-sm-inline-block d-none">{{$t("result_card.case")}}</span>
-        {{ formatZbllKey(result["key"]) }}
+        <span class="fw-bold">{{ parsed.letters }}</span>
+        <small class="opacity-75">({{ result["key"] }})</small>
         <i
             class="bi clickable px-1"
             :title="$t('result_card.add_to_starred') + ' (Alt+A)'"

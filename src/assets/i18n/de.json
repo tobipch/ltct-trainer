@@ -58,7 +58,9 @@
       "show_lang_button": "Sprachauswahl anzeigen",
       "are_you_sure_to_reset": "Bist du sicher?",
       "scramble_appendix": "Scramble-Anhang",
-      "timer_start_delay_ms": "Timer-Startverzögerung (ms)"
+      "timer_start_delay_ms": "Timer-Startverzögerung (ms)",
+      "letter_scheme": "Buchstabenschema",
+      "reset_confirm": "Buchstabenschema auf Speffz zurücksetzen?"
     },
     "timer": {
       "no_scramble": "kein Mischvorgang verfügbar",

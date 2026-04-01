@@ -17,6 +17,15 @@ export const formatZbllKey = key => {
     return `${group}-${target} ${twist}`;
 }
 
+// Parse an LTCT key and translate pieces using the letter scheme
+// Returns { group, target, twist, targetLetter, twistLetter, letters }
+export const parseLtctKey = (key, toLetter) => {
+    const [group, target, twist] = key.split(' ')
+    const targetLetter = toLetter(target)
+    const twistLetter = toLetter(twist)
+    return { group, target, twist, targetLetter, twistLetter, letters: targetLetter + twistLetter }
+}
+
 export function areSetsEqual(setA, setB) {
     return setA.size === setB.size && [...setA].every(item => setB.has(item));
 }

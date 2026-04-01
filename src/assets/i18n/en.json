@@ -59,7 +59,9 @@
       "show_lang_button": "Show language button",
       "are_you_sure_to_reset": "Are you sure?",
       "scramble_appendix": "Scramble appendix",
-      "timer_start_delay_ms": "Timer start delay (ms)"
+      "timer_start_delay_ms": "Timer start delay (ms)",
+      "letter_scheme": "Letter Scheme",
+      "reset_confirm": "Reset letter scheme to Speffz?"
     },
     "timer": {
       "no_scramble": "no scramble available",

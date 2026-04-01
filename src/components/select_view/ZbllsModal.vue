@@ -2,15 +2,18 @@
 import {computed, onMounted, ref} from "vue";
 import {Modal} from 'bootstrap'
 import {useSelectedStore} from "@/stores/SelectedStore";
+import {useLetterSchemeStore} from "@/stores/LetterSchemeStore";
 import ZbllCard from "@/components/select_view/ZbllCard.vue";
 import ZbllCaseInfo from "@/components/select_view/ZbllCaseInfo.vue";
 
 const props = defineProps(['oll', 'coll', 'closeCallback']);
 const {oll, coll, closeCallback} = props;
 const selected = useSelectedStore();
+const ls = useLetterSchemeStore();
 const zbllKeys = selected.allZbllKeysArray.filter(k => k.startsWith(`${oll} ${coll}`))
+const collLetter = computed(() => ls.toLetter(coll))
 const modalTitle = computed(() => {
-  return oll + " • " + coll
+  return oll + " \u2022 " + collLetter.value + " / " + coll
       + " (" + selected.numZbllsInCollSelected(oll, coll)
       + "/" + zbllKeys.length + ")";
 });
