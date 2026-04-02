@@ -70,11 +70,23 @@ const faceStyle = (face) => ({
   padding: '2px',
 });
 
-const centerStyle = (face) => ({
-  backgroundColor: faceColors.value[face],
-  borderRadius: '3px',
-  color: face === 'D' || face === 'U' ? '#333' : '#fff',
-});
+function contrastText(hex) {
+  // Parse hex color and compute relative luminance
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return luminance > 0.5 ? '#333' : '#fff';
+}
+
+const centerStyle = (face) => {
+  const bg = faceColors.value[face];
+  return {
+    backgroundColor: bg,
+    borderRadius: '3px',
+    color: contrastText(bg),
+  };
+};
 
 const onReset = () => {
   ls.resetDefaults();

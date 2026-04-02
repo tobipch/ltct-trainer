@@ -126,6 +126,7 @@ const onResetBtnClicked = () => {
             style="width: 160px"
             placeholder="e.g. x y"
             v-model="settings.store.cubeOrientation"
+            @keydown.space.stop=""
             id="cubeOrientation"/>
         <small class="text-muted d-block mt-1">{{ $t("settings.cube_orientation_hint") }}</small>
       </div>

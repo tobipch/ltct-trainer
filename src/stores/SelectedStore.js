@@ -16,10 +16,13 @@ const SPEFFZ_ORDER = [
 ]
 const speffzIndex = Object.fromEntries(SPEFFZ_ORDER.map((s, i) => [s, i]))
 
+const GROUP_ORDER = { "UU": 0, "UD": 1, "DU": 2, "DD": 3 }
+
 function compareKeys(a, b) {
   const [gA, tA, wA] = a.split(' ')
   const [gB, tB, wB] = b.split(' ')
-  if (gA !== gB) return gA < gB ? -1 : 1
+  const gi = (GROUP_ORDER[gA] ?? 99) - (GROUP_ORDER[gB] ?? 99)
+  if (gi !== 0) return gi
   const ti = (speffzIndex[tA] ?? 99) - (speffzIndex[tB] ?? 99)
   if (ti !== 0) return ti
   return (speffzIndex[wA] ?? 99) - (speffzIndex[wB] ?? 99)
