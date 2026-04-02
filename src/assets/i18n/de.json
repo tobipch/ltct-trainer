@@ -60,7 +60,7 @@
       "scramble_appendix": "Scramble-Anhang",
       "timer_start_delay_ms": "Timer-Startverzögerung (ms)",
       "cube_orientation": "Würfelorientierung",
-      "cube_orientation_hint": "Rotation für die Würdelanzeige, z.B. y, x2, x y (max. 2 Rotationen)",
+      "cube_orientation_hint": "Rotation für die Würfelanzeige, z.B. y, x2, x y (max. 2 Rotationen)",
       "letter_scheme": "Buchstabenschema",
       "reset_confirm": "Buchstabenschema auf Speffz zurücksetzen?"
     },
