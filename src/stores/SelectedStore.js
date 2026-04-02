@@ -1,4 +1,4 @@
-import {computed, reactive, watch} from 'vue'
+import {reactive, watch} from 'vue'
 import { defineStore } from 'pinia'
 import ltct_map from "@/assets/ltct_map.json"
 
@@ -16,10 +16,13 @@ const SPEFFZ_ORDER = [
 ]
 const speffzIndex = Object.fromEntries(SPEFFZ_ORDER.map((s, i) => [s, i]))
 
+const GROUP_ORDER = { "UU": 0, "UD": 1, "DU": 2, "DD": 3 }
+
 function compareKeys(a, b) {
   const [gA, tA, wA] = a.split(' ')
   const [gB, tB, wB] = b.split(' ')
-  if (gA !== gB) return gA < gB ? -1 : 1
+  const gi = (GROUP_ORDER[gA] ?? 99) - (GROUP_ORDER[gB] ?? 99)
+  if (gi !== 0) return gi
   const ti = (speffzIndex[tA] ?? 99) - (speffzIndex[tB] ?? 99)
   if (ti !== 0) return ti
   return (speffzIndex[wA] ?? 99) - (speffzIndex[wB] ?? 99)
@@ -31,17 +34,6 @@ export const useSelectedStore = defineStore('selected', () => {
   const store = reactive({
     keys: loadedArray,
   });
-
-  const commonScrambleLength = computed(() => {
-    let result = 0
-    store.keys.forEach(key => {
-      const scrambleKeys = Object.keys(ltct_map[key].scrambles)
-      if (scrambleKeys.length === 0) return
-      const minLength = parseInt(scrambleKeys[0])
-      result = Math.max(result, minLength)
-    })
-    return result
-  })
 
   const applyFromPreset = presetKeysSet => store.keys = [...presetKeysSet]
 
@@ -88,7 +80,7 @@ export const useSelectedStore = defineStore('selected', () => {
     localStorage.setItem(localStoreKey, JSON.stringify(store.keys))
   })
 
-  return {store, commonScrambleLength, allZbllKeysArray, addOll, addColl, addZbll,
+  return {store, allZbllKeysArray, addOll, addColl, addZbll,
     removeOll, removeColl, removeZbll, toggleSelected,
     isZbllSelected, numZbllsInCollSelected, numZbllsInOllSelected, totalZbllsSelected, applyFromPreset}
 });

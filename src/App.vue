@@ -13,9 +13,9 @@ const session = useSessionStore()
 
 // bind selectStore and sessionStore
 watch(() => selected.store.keys, () => {
-  session.setSelectedKeys(selected.store.keys, selected.commonScrambleLength)
+  session.setSelectedKeys(selected.store.keys)
 })
-session.setSelectedKeys(selected.store.keys, selected.commonScrambleLength)
+session.setSelectedKeys(selected.store.keys)
 
 </script>
 

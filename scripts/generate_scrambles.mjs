@@ -124,7 +124,7 @@ async function main() {
     const algStr = caseData.algs[0];
     const inverseAlgStr = new Alg(algStr).invert().toString();
 
-    const scramblesByLength = {};
+    const scrambles = [];
 
     for (let i = 0; i < SCRAMBLES_PER_CASE; i++) {
       const scramble = await generateOneScramble(
@@ -132,20 +132,10 @@ async function main() {
         inverseAlgStr,
         experimentalSolve3x3x3IgnoringCenters,
       );
-      const count = moveCount(scramble);
-      const bucket = `${count}`;
-      if (!scramblesByLength[bucket]) {
-        scramblesByLength[bucket] = [];
-      }
-      scramblesByLength[bucket].push(scramble);
+      scrambles.push(scramble);
     }
 
-    // Sort scramble keys numerically
-    const sorted = {};
-    for (const len of Object.keys(scramblesByLength).sort((a, b) => +a - +b)) {
-      sorted[len] = scramblesByLength[len];
-    }
-    caseData.scrambles = sorted;
+    caseData.scrambles = scrambles;
     done++;
 
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);

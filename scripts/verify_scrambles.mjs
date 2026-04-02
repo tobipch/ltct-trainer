@@ -28,7 +28,8 @@ for (const [key, caseData] of Object.entries(ltctMap)) {
   const expectedCornerPieces = [...expectedPattern.patternData.CORNERS.pieces];
   const expectedCornerOrient = [...expectedPattern.patternData.CORNERS.orientation];
 
-  for (const [len, scrambles] of Object.entries(caseData.scrambles)) {
+  const scrambles = caseData.scrambles;
+  {
     for (let i = 0; i < Math.min(SAMPLE_SIZE, scrambles.length); i++) {
       const scramble = scrambles[i];
       const result = kpuzzle.defaultPattern().applyAlg(new Alg(scramble));
@@ -50,7 +51,7 @@ for (const [key, caseData] of Object.entries(ltctMap)) {
 
       if (!edgesOk || !cornersOk) {
         errors++;
-        console.error(`FAIL: ${key} scramble[${len}][${i}]: ${scramble}`);
+        console.error(`FAIL: ${key} scramble[${i}]: ${scramble}`);
         if (!edgesOk) {
           console.error(`  Edges: got [${edgePieces}] orient [${edgeOrient}]`);
           console.error(`  Expected: [${EXPECTED_EDGES}] orient [${EXPECTED_EDGE_ORIENT}]`);
