@@ -1,7 +1,7 @@
 {
   "da": {
     "nav": {
-      "zbll_trainer": "ZBLL-træner",
+      "zbll_trainer": "LTCT Trainer",
       "select_btn": "vælg",
       "n_cases": "ingen valgte sager | en sag valgt | {count} sager valgt",
       "n_to_recap": "{count} til genopfriskning",

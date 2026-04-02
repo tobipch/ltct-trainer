@@ -1,7 +1,7 @@
 {
   "tr": {
     "nav": {
-      "zbll_trainer": "ZBLL Eğitmeni",
+      "zbll_trainer": "LTCT Trainer",
       "select_btn": "seç",
       "n_cases": "seçili durum yok | bir durum seçildi | {count} durum seçildi",
       "n_to_recap": "{count} tekrar",

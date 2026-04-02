@@ -1,7 +1,7 @@
 {
   "de": {
     "nav": {
-      "zbll_trainer": "ZBLL Trainer",
+      "zbll_trainer": "LTCT Trainer",
       "select_btn": "auswählen",
       "n_cases": "keine Fälle ausgewählt | ein Fall ausgewählt | {count} Fälle ausgewählt",
       "n_to_recap": "{count} zum Wiederholen",
@@ -59,6 +59,8 @@
       "are_you_sure_to_reset": "Bist du sicher?",
       "scramble_appendix": "Scramble-Anhang",
       "timer_start_delay_ms": "Timer-Startverzögerung (ms)",
+      "cube_orientation": "Würfelorientierung",
+      "cube_orientation_hint": "Rotation für die Würdelanzeige, z.B. y, x2, x y (max. 2 Rotationen)",
       "letter_scheme": "Buchstabenschema",
       "reset_confirm": "Buchstabenschema auf Speffz zurücksetzen?"
     },

@@ -1,7 +1,7 @@
 {
   "in": {
     "nav": {
-      "zbll_trainer": "Pelatih ZBLL",
+      "zbll_trainer": "LTCT Trainer",
       "select_btn": "pilih",
       "n_cases": "tidak ada kasus yang dipilih | satu kasus dipilih | {count} kasus dipilih",
       "n_to_recap": "{count} untuk rekap",

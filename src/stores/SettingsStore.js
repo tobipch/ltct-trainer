@@ -14,6 +14,7 @@ const defaultSettings = {
     showHowTo: true,
     timerStartDelayMs: 100,
     scrambleAppendix: "None",
+    cubeOrientation: "",
 }
 
 const localStorageKey = "zbllTrainerSettings"

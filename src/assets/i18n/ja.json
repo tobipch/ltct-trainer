@@ -1,7 +1,7 @@
 {
   "ja": {
     "nav": {
-      "zbll_trainer": "ZBLL トレーナー",
+      "zbll_trainer": "LTCT Trainer",
       "select_btn": "選択",
       "n_cases": "選択されているケースなし | 選択されているケース 1 つ | 選択されているケース {count} 個",
       "n_to_recap": "復習: {count}",

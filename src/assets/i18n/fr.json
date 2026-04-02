@@ -1,7 +1,7 @@
 {
   "fr": {
     "nav": {
-      "zbll_trainer": "Entraîneur ZBLL",
+      "zbll_trainer": "LTCT Trainer",
       "select_btn": "sélectionner",
       "n_cases": "aucun cas sélectionné | un cas sélectionné | {count} cas sélectionnés",
       "n_to_recap": "{count} à réviser",

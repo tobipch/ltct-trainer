@@ -41,7 +41,7 @@ const modalShown = ref(false);
       <strong class="text-center">
         {{ collLetter }}
       </strong>
-      <small class="opacity-75">{{ coll }}</small>
+      <small class="opacity-75 ms-1">{{ coll }}</small>
       <span>
         ({{num_cases_selected}}/{{total_zblls_in_coll}})
       </span>

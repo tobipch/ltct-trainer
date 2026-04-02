@@ -1,8 +1,10 @@
 <script setup>
 import {computed, onBeforeUnmount, onMounted, ref, watch} from "vue";
+import {useSettingsStore} from "@/stores/SettingsStore";
 import { TwistyPlayer } from "cubing/twisty";
 
 const props = defineProps(['scramble'])
+const settings = useSettingsStore()
 const containerDiv = ref(null)
 let player = null
 
@@ -39,9 +41,12 @@ const createPlayer = () => {
 
   if (!props.scramble || !containerDiv.value) return
 
+  const orient = (settings.store.cubeOrientation || "").trim()
+  const alg = orient ? orient + " " + props.scramble : props.scramble
+
   player = new TwistyPlayer({
     puzzle: "3x3x3",
-    alg: props.scramble,
+    alg: alg,
     visualization: "3D",
     hintFacelets: "none",
     backView: "none",
