@@ -1,7 +1,7 @@
 {
   "uk": {
     "nav": {
-      "zbll_trainer": "Тренер ZBLL",
+      "zbll_trainer": "LTCT Trainer",
       "select_btn": "вибрати",
       "n_cases": "не обрано ситуацій | обрана одна ситуація | обрано {count} ситуації",
       "n_to_recap": "{count} для повторення",

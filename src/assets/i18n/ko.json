@@ -1,7 +1,7 @@
 {
   "ko": {
     "nav": {
-      "zbll_trainer": "ZBLL 트레이너",
+      "zbll_trainer": "LTCT Trainer",
       "select_btn": "선택",
       "n_cases": "선택된 케이스 없음 | 선택된 케이스 1개 | 선택된 케이스 {count}개",
       "n_to_recap": "복습할 케이스: {count}개",

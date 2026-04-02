@@ -118,6 +118,18 @@ const onResetBtnClicked = () => {
       </div>
 
       <hr>
+      <div class="mb-2">
+        <label for="cubeOrientation" class="form-label">{{ $t("settings.cube_orientation") }}</label>
+        <input
+            type="text"
+            class="mx-2 form-control form-control-sm d-inline-block"
+            style="width: 160px"
+            placeholder="e.g. x y"
+            v-model="settings.store.cubeOrientation"
+            id="cubeOrientation"/>
+        <small class="text-muted d-block mt-1">{{ $t("settings.cube_orientation_hint") }}</small>
+      </div>
+
       <div class="mb-3">
         <label class="form-label fw-bold">{{ $t("settings.letter_scheme") }}</label>
         <LetterSchemeEditor />

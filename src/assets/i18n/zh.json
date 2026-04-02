@@ -1,7 +1,7 @@
 {
   "zh": {
     "nav": {
-      "zbll_trainer": "ZBLL 训练器",
+      "zbll_trainer": "LTCT Trainer",
       "select_btn": "选择",
       "n_cases": "未选择情况 | 已选择一个情况 | 已选择 {count} 个情况",
       "n_to_recap": "待复习: {count}",

@@ -79,7 +79,7 @@ const starClicked = () => {
       <hr class="my-2 my-sm-3">
       <p class="card-text my-0 my-sm-1">
         <span class="d-sm-inline-block d-none">{{$t("result_card.case")}}</span>
-        <span class="fw-bold">{{ parsed.letters }}</span>
+        <span class="fw-bold mx-1">{{ parsed.letters }}</span>
         <small class="opacity-75">({{ result["key"] }})</small>
         <i
             class="bi clickable px-1"

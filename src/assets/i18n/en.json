@@ -1,7 +1,7 @@
 {
   "en": {
     "nav": {
-      "zbll_trainer": "ZBLL Trainer",
+      "zbll_trainer": "LTCT Trainer",
       "select_btn": "select",
       "n_cases": "no cases selected | one case selected | {count} cases selected",
       "n_to_recap": "{count} to recap",
@@ -60,6 +60,8 @@
       "are_you_sure_to_reset": "Are you sure?",
       "scramble_appendix": "Scramble appendix",
       "timer_start_delay_ms": "Timer start delay (ms)",
+      "cube_orientation": "Cube orientation",
+      "cube_orientation_hint": "Rotation applied to the cube display, e.g. y, x2, x y (max 2 rotations)",
       "letter_scheme": "Letter Scheme",
       "reset_confirm": "Reset letter scheme to Speffz?"
     },

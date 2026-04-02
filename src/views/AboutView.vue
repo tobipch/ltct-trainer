@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <h1>Zbll trainer</h1>
+  <h1>LTCT Trainer</h1>
   <div>
     {{$t("about.text")}}
   </div>

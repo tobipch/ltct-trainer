@@ -5,8 +5,28 @@ import ltct_map from "@/assets/ltct_map.json"
 const localStoreKey = "currentLtctArray";
 const loadedArray = JSON.parse(localStorage.getItem(localStoreKey) || "[]")
 
+// Speffz sticker order for sorting cases
+const SPEFFZ_ORDER = [
+  "UBL", "UBR", "UFR", "UFL",
+  "LUB", "LUF", "LDF", "LDB",
+  "FUL", "FUR", "FDR", "FDL",
+  "RUF", "RUB", "RDB", "RDF",
+  "BUR", "BUL", "BDL", "BDR",
+  "DFL", "DFR", "DBR", "DBL",
+]
+const speffzIndex = Object.fromEntries(SPEFFZ_ORDER.map((s, i) => [s, i]))
+
+function compareKeys(a, b) {
+  const [gA, tA, wA] = a.split(' ')
+  const [gB, tB, wB] = b.split(' ')
+  if (gA !== gB) return gA < gB ? -1 : 1
+  const ti = (speffzIndex[tA] ?? 99) - (speffzIndex[tB] ?? 99)
+  if (ti !== 0) return ti
+  return (speffzIndex[wA] ?? 99) - (speffzIndex[wB] ?? 99)
+}
+
 export const useSelectedStore = defineStore('selected', () => {
-  const allZbllKeysArray = Object.keys(ltct_map)
+  const allZbllKeysArray = Object.keys(ltct_map).sort(compareKeys)
 
   const store = reactive({
     keys: loadedArray,

@@ -1,7 +1,7 @@
 {
   "cs": {
     "nav": {
-      "zbll_trainer": "ZBLL Tréner",
+      "zbll_trainer": "LTCT Trainer",
       "select_btn": "vybrat",
       "n_cases": "žádné vybrané případy | jeden vybraný případ | {count} vybraných případů",
       "n_to_recap": "{count} opakování",

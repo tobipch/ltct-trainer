@@ -1,7 +1,7 @@
 {
   "nl": {
     "nav": {
-      "zbll_trainer": "ZBLL Trainer",
+      "zbll_trainer": "LTCT Trainer",
       "select_btn": "selecteer",
       "n_cases": "geen geselecteerde situaties | één situatie geselecteerd | {count} situaties geselecteerd",
       "n_to_recap": "{count} om te herhalen",
