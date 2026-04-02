@@ -1,4 +1,4 @@
-import {computed, reactive, watch} from 'vue'
+import {reactive, watch} from 'vue'
 import { defineStore } from 'pinia'
 import ltct_map from "@/assets/ltct_map.json"
 
@@ -34,17 +34,6 @@ export const useSelectedStore = defineStore('selected', () => {
   const store = reactive({
     keys: loadedArray,
   });
-
-  const commonScrambleLength = computed(() => {
-    let result = 0
-    store.keys.forEach(key => {
-      const scrambleKeys = Object.keys(ltct_map[key].scrambles)
-      if (scrambleKeys.length === 0) return
-      const minLength = parseInt(scrambleKeys[0])
-      result = Math.max(result, minLength)
-    })
-    return result
-  })
 
   const applyFromPreset = presetKeysSet => store.keys = [...presetKeysSet]
 
@@ -91,7 +80,7 @@ export const useSelectedStore = defineStore('selected', () => {
     localStorage.setItem(localStoreKey, JSON.stringify(store.keys))
   })
 
-  return {store, commonScrambleLength, allZbllKeysArray, addOll, addColl, addZbll,
+  return {store, allZbllKeysArray, addOll, addColl, addZbll,
     removeOll, removeColl, removeZbll, toggleSelected,
     isZbllSelected, numZbllsInCollSelected, numZbllsInOllSelected, totalZbllsSelected, applyFromPreset}
 });

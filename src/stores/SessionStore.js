@@ -13,9 +13,6 @@ const initialStore = JSON.parse(localStorage.getItem(storeKey)) || {
 
     "recapMode": false,
 
-    // Shortest common scramble length
-    "scrambleLength": 0,
-
     // map key => count
     "keysCount": {},
 
@@ -93,14 +90,13 @@ export const useSessionStore = defineStore('session', () => {
                 store.currentKey = random_element(store.keys)
             }
         }
-        store.currentScramble = makeScramble(store.currentKey, store.scrambleLength)
+        store.currentScramble = makeScramble(store.currentKey)
     }
 
-    const setSelectedKeys = (keys, scrambleLength) => {
+    const setSelectedKeys = (keys) => {
         timerState.value = TimerState.NOT_RUNNING
         store.recapMode = false
         store.keys = keys
-        store.scrambleLength = scrambleLength
         resetKeysCount() // TODO maybe don't reset every time
         setRandomCase()
     }
