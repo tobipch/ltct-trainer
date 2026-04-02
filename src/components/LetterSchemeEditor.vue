@@ -160,7 +160,7 @@ const onReset = () => {
       </div>
     </div>
 
-    <button class="btn btn-sm btn-outline-secondary mt-2" @click="onReset">
+    <button type="button" class="btn btn-sm btn-outline-secondary mt-2" @click="onReset">
       Reset to Speffz
     </button>
   </div>
