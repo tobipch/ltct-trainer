@@ -105,10 +105,9 @@
       "navigate": "Zu vorherigem / nächstem / erstem / letztem Ergebnis in den Statistiken wechseln"
     },
     "contact": {
-      "contact": "Kontakt",
-      "reach_out": "Kontaktiere den Entwickler",
-      "get_the_code": "Quellcode herunterladen",
-      "support": "Unterstütze das Projekt"
+      "contact": "Info",
+      "get_the_code": "Quellcode",
+      "credits": "Credits"
     }
   }
 }

@@ -103,9 +103,8 @@
     },
     "contact": {
       "contact": "お問い合わせ",
-      "reach_out": "開発者に連絡する",
       "get_the_code": "ソースコードを取得する",
-      "support": "プロジェクトをサポートする"
+      "credits": "Credits"
     }
   }
 }

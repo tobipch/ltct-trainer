@@ -103,9 +103,8 @@
     },
     "contact": {
       "contact": "İletişim",
-      "reach_out": "Geliştiriciye ulaşın",
       "get_the_code": "Kaynak kodunu edinin",
-      "support": "Projeyi destekleyin"
+      "credits": "Credits"
     }
   }
 }

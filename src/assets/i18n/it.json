@@ -103,9 +103,8 @@
     },
     "contact": {
       "contact": "Contatto",
-      "reach_out": "Contatta il responsabile del progetto",
       "get_the_code": "Ottieni il codice sorgente",
-      "support": "Supporta il progetto"
+      "credits": "Credits"
     }
   }
 }

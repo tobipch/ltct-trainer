@@ -102,9 +102,8 @@
     },
     "contact": {
       "contact": "Kontakt",
-      "reach_out": "Kontakt udvikleren",
       "get_the_code": "Få kildekoden",
-      "support": "Støt projektet"
+      "credits": "Credits"
     }
   }
 }

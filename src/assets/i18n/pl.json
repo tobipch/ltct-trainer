@@ -103,9 +103,8 @@
     },
     "contact": {
       "contact": "Kontakt",
-      "reach_out": "Skontaktuj się z programistą",
       "get_the_code": "Pobierz kod źródłowy",
-      "support": "Wesprzyj projekt"
+      "credits": "Credits"
     }
   }
 }

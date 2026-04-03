@@ -103,9 +103,8 @@
     },
     "contact": {
       "contact": "연락하기",
-      "reach_out": "개발자에게 연락하기",
       "get_the_code": "소스 코드 가져오기",
-      "support": "프로젝트 지원"
+      "credits": "Credits"
     }
   }
 }

@@ -103,9 +103,8 @@
     },
     "contact": {
       "contact": "Contact",
-      "reach_out": "Neem contact op met de ontwikkelaar",
       "get_the_code": "Bekijk de broncode",
-      "support": "Ondersteun het project"
+      "credits": "Credits"
     }
   }
 }

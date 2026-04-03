@@ -103,9 +103,8 @@
     },
     "contact": {
       "contact": "Kontak",
-      "reach_out": "Hubungi orang pengembang",
       "get_the_code": "Dapatkan kode sumbernya",
-      "support": "Dukung projek ini"
+      "credits": "Credits"
     }
   }
 }

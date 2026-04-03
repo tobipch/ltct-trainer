@@ -103,9 +103,8 @@
     },
     "contact": {
       "contact": "Контакты",
-      "reach_out": "Связаться с разработчиком",
       "get_the_code": "Исходники",
-      "support": "Поддержать проект"
+      "credits": "Credits"
     }
   }
 }

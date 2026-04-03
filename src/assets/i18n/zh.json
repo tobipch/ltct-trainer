@@ -103,9 +103,8 @@
     },
     "contact": {
       "contact": "联系方式",
-      "reach_out": "联系开发者",
       "get_the_code": "获取源代码",
-      "support": "支持该项目"
+      "credits": "Credits"
     }
   }
 }

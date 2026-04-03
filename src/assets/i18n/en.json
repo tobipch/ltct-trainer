@@ -106,10 +106,9 @@
       "navigate": "Navigate to prev/next/first/last result in stats"
     },
     "contact": {
-      "contact": "Contact",
-      "reach_out": "Reach out to the dev guy",
-      "get_the_code": "Get the source code",
-      "support": "Support the project"
+      "contact": "About",
+      "get_the_code": "Source code",
+      "credits": "Credits"
     }
   }
 }

@@ -103,9 +103,8 @@
     },
     "contact": {
       "contact": "צור קשר",
-      "reach_out": "צור קשר עם המפתח",
       "get_the_code": "קבל את קוד המקור",
-      "support": "תמוך בפרויקט"
+      "credits": "Credits"
     }
   }
 }

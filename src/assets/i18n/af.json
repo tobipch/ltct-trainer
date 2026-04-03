@@ -102,9 +102,8 @@
     },
     "contact": {
       "contact": "Kontak",
-      "reach_out": "Kontak die ontwikkelingspersoon",
       "get_the_code": "Kry die bronkode",
-      "support": "Ondersteun die projek"
+      "credits": "Credits"
     }
   }
 }

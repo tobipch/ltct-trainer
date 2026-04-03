@@ -102,9 +102,8 @@
     },
     "contact": {
       "contact": "Kontakt",
-      "reach_out": "Spojte se s vývojářem",
       "get_the_code": "Získat zdrojový kód",
-      "support": "Podpořte projekt"
+      "credits": "Credits"
     }
   }
 }
