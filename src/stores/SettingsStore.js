@@ -5,7 +5,6 @@ export const fontsList = ["Roboto Mono", "Courier New", "Ubuntu Mono", "Arial", 
     "sans-serif", "Times", "serif",]
 
 const defaultSettings = {
-    pictureView: "top",
     timerUpdate: "seconds",
     timerPrecision: 2,
     timerFont: fontsList[0],
