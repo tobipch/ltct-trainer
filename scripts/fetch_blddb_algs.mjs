@@ -83,11 +83,18 @@ async function main() {
   }
 
   // 5. Match blddb entries to our cases and collect updated algorithms
+  //    Only process J-prefix keys (UFR buffer), which is what this trainer uses.
   let matched = 0;
   let updated = 0;
   let unmatched = 0;
+  let skipped = 0;
 
   for (const [blddbKey, entries] of Object.entries(blddbData)) {
+    if (!blddbKey.startsWith("J")) {
+      skipped++;
+      continue;
+    }
+
     // Collect all algorithms for this blddb case
     const allAlgs = [];
     for (const entry of entries) {
@@ -154,8 +161,9 @@ async function main() {
     }
   }
 
+  const jCount = Object.keys(blddbData).filter((k) => k.startsWith("J")).length;
   console.log(
-    `\nSummary: ${matched} matched, ${updated} updated, ${unmatched} unmatched out of ${Object.keys(blddbData).length} blddb entries.`
+    `\nSummary: ${matched} matched, ${updated} updated, ${unmatched} unmatched out of ${jCount} UFR-buffer entries (${skipped} non-UFR skipped).`
   );
 
   // 6. Write back
