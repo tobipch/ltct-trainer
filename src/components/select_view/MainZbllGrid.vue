@@ -11,12 +11,28 @@ const olls = select.allZbllKeysArray
 </script>
 
 <template>
-  <div class="row gx-0">
-    <div v-for="oll in olls" :key="oll" class="col">
+  <div class="oll-grid">
+    <div v-for="oll in olls" :key="oll" class="oll-grid-item">
       <OllCard :oll="oll"/>
     </div>
   </div>
 </template>
 
 <style scoped>
+.oll-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.oll-grid-item {
+  flex: 1 0 0%;
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  .oll-grid-item {
+    flex: 0 0 calc(50% - 3px);
+  }
+}
 </style>

@@ -14,7 +14,7 @@ const appendix = computed(() => settings.store.scrambleAppendix === "None" ? "" 
 </script>
 
 <template>
-  <h3 class="border-bottom border-secondary m-1">
+  <h3 class="border-bottom border-secondary scramble-bar">
     <span class="opacity-50 d-none d-sm-inline-block">{{$t("timer.scramble") + '&nbsp;'}} </span>
     <span :style="{ fontSize: settings.store.scrambleFontSize + 'px' }">
       {{ scramble }}
@@ -24,4 +24,8 @@ const appendix = computed(() => settings.store.scrambleAppendix === "None" ? "" 
 </template>
 
 <style scoped>
+.scramble-bar {
+  padding: 10px;
+  margin: 0;
+}
 </style>
