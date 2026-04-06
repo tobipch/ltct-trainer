@@ -23,9 +23,9 @@ const tinySelectBtnText = computed(() => {
 </script>
 
 <template>
-  <nav class="navbar bg-secondary bg-opacity-25 py-lg-3 py-sm-1 py-0">
-    <div class="row w-100 align-items-center">
-      <div class="col-auto me-auto">
+  <nav class="navbar bg-secondary bg-opacity-25 py-lg-3 py-sm-1 py-0 w-100">
+    <div class="navbar-inner w-100 d-flex align-items-center">
+      <div class="me-auto">
         <button
             v-if="isTimerView"
             tabindex="-1"
@@ -54,7 +54,7 @@ const tinySelectBtnText = computed(() => {
           {{ $t("nav.n_to_recap", session.casesWithZeroCount.length) }}
         </span>
       </div>
-      <div class="col d-flex justify-content-end p-0">
+      <div class="d-flex justify-content-end p-0">
         <LangDropdown/>
         <button
             class="btn btn-link px-1 px-md-3"
@@ -73,5 +73,11 @@ const tinySelectBtnText = computed(() => {
 <style scoped>
 .logoText {
   font-weight: 900;
+}
+.navbar-inner {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding-left: 12px;
+  padding-right: 12px;
 }
 </style>

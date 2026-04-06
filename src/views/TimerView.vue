@@ -21,7 +21,7 @@ const sessionStore = useSessionStore()
 const settings = useSettingsStore()
 const timerNotRunning = computed(() => sessionStore.timerState === TimerState.NOT_RUNNING)
 const timerWrapClass = computed(() => timerNotRunning.value
-        ? ("col-lg-8 col-md-5 col-12 " + ((displayStore.showSettings || displayStore.showStatistics) ? "align-self-start" : "h-100"))
+        ? ("col-lg-8 col-md-5 col-12 align-self-start")
         : "col-12")
 const rightColumnClass = computed(() => timerNotRunning.value ? "col-lg-4 col-md-7 col-12 align-items-start" : "d-none")
 const selectStore = useSelectedStore()
@@ -136,7 +136,7 @@ const onTimerTouchEnd = event => {
 </script>
 
 <template>
-  <div class="row flex-grow-1 p-0">
+  <div class="row p-0">
     <div class="d-flex flex-column">
       <div class="row no-gutters">
         <div class="col-12">
@@ -144,13 +144,13 @@ const onTimerTouchEnd = event => {
         </div>
       </div>
 
-      <div class="row flex-grow-1">
+      <div class="row">
 
         <div
             class="d-flex flex-column p-0 timer_wrap"
             :class="timerWrapClass">
           <div
-              class="flex-grow-1 d-flex align-items-center justify-content-center"
+              class="d-flex align-items-center justify-content-center timer_touch_area"
               @touchstart="onTimerTouchStart"
               @touchend="onTimerTouchEnd"
           >
@@ -185,5 +185,8 @@ const onTimerTouchEnd = event => {
 <style scoped>
 .timer_wrap {
   transition: width 0.1s ease-in-out;
+}
+.timer_touch_area {
+  padding: 80px 0;
 }
 </style>

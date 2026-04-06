@@ -22,7 +22,7 @@ const olls = select.allZbllKeysArray
 .oll-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 12px;
 }
 
 .oll-grid-item {
@@ -32,7 +32,7 @@ const olls = select.allZbllKeysArray
 
 @media (max-width: 480px) {
   .oll-grid-item {
-    flex: 0 0 calc(50% - 3px);
+    flex: 0 0 calc(50% - 6px);
   }
 }
 </style>
