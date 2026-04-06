@@ -27,7 +27,7 @@ onMounted(() => {
     <SelectSideCard/>
   </div>
   <div class="card mt-2 mb-2">
-    <div class="card-body p-2">
+    <div class="card-body">
       <p class="text-muted mb-2">{{ $t("select.select_intro") }}</p>
       <MainZbllGrid/>
     </div>

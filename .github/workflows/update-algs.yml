@@ -1,0 +1,37 @@
+name: Update algorithms from blddb
+
+on:
+  schedule:
+    - cron: '0 3 * * 1' # Every Monday at 03:00 UTC
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      - name: Fetch latest algorithms
+        run: node scripts/fetch_blddb_algs.mjs
+
+      - name: Create PR if algorithms changed
+        uses: peter-evans/create-pull-request@v6
+        with:
+          title: 'Update LTCT algorithms from blddb'
+          commit-message: 'Update LTCT algorithms from blddb'
+          branch: auto/update-algs
+          body: |
+            Automated weekly update of LTCT algorithms from [blddb](https://github.com/nbwzx/blddb).
+
+            Only the `algs` arrays in `ltct_map.json` are updated. Scrambles are unchanged.
+          delete-branch: true
