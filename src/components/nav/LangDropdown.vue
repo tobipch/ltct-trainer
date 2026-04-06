@@ -6,7 +6,7 @@ import {setLocaleAndReload, supportedLocales, addTranslationUrl} from "@/locale"
 
 <template>
   <div class="dropdown d-inline">
-    <button class="btn btn-link dropdown-toggle text-info px-1 px-md-2"
+    <button class="btn btn-sm btn-outline-info dropdown-toggle"
             :title="$t('nav.language')"
             tabindex="-1"
             @keydown.space.prevent=""
@@ -14,7 +14,7 @@ import {setLocaleAndReload, supportedLocales, addTranslationUrl} from "@/locale"
             id="dropdownLang"
             data-bs-toggle="dropdown"
             aria-expanded="false">
-      <i class="bi-translate font_bigger"/>
+      <i class="bi-translate"/>
     </button>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLang">
       <li v-for="locale in supportedLocales" :key="locale.code">

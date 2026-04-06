@@ -14,7 +14,7 @@ const route = useRoute()
 const displayStore = useDisplayStore()
 
 const isTimerView = computed(() => route.fullPath.endsWith("timer"))
-const settingsBtnClass = computed(() => displayStore.showSettings ? 'bg-info text-white' : 'text-info')
+const settingsBtnClass = computed(() => displayStore.showSettings ? 'btn-info' : 'btn-outline-info')
 const tinySelectBtnText = computed(() => {
   return isTimerView && session.store.recapMode
       ? (session.casesWithZeroCount.length + '/' + selected.totalZbllsSelected())
@@ -54,15 +54,15 @@ const tinySelectBtnText = computed(() => {
           {{ $t("nav.n_to_recap", session.casesWithZeroCount.length) }}
         </span>
       </div>
-      <div class="d-flex justify-content-end p-0">
+      <div class="d-flex align-items-center justify-content-end p-0 gap-1">
         <LangDropdown/>
         <button
-            class="btn btn-link px-1 px-md-3"
+            class="btn btn-sm"
             tabindex="-1" @keydown.space.prevent=""
             :class="settingsBtnClass"
             @click="displayStore.showSettings = !displayStore.showSettings"
             :title="$t('nav.settings')">
-          <i class="bi-wrench font_bigger"/>
+          <i class="bi-wrench"/>
         </button>
         <ThemeSwitcher/>
       </div>

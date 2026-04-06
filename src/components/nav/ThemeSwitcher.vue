@@ -9,10 +9,10 @@ const themeStore = useThemeStore();
   <button
       tabindex="-1"
       @keydown.space.prevent=""
-      class="btn btn-link text-info"
+      class="btn btn-sm btn-outline-info"
       @click="themeStore.toggleDayNight()"
       :title="$t('nav.toggle_night_mode')">
-    <i class="bi-moon font_bigger" :class="themeStore.icon"/>
+    <i class="bi-moon" :class="themeStore.icon"/>
   </button>
 </template>
 
