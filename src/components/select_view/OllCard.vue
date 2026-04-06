@@ -37,9 +37,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="border border-dark rounded-1" :class="card_bg_class">
+  <div class="border rounded-1" :class="card_bg_class">
     <div
-        class="header p-1 clickable border-bottom border-secondary d-flex justify-content-between align-items-center"
+        class="header p-1 clickable border-bottom d-flex justify-content-between align-items-center"
         data-bs-toggle="collapse"
         :data-bs-target="`#collapsed-colls-${oll}`">
       <div>
