@@ -45,9 +45,6 @@
       "scramble_size": "Mischgröße",
       "timer_size": "Timergröße",
       "timer_font": "Timer-Schriftart",
-      "zbll_pictures_view": "ZBLL-Bildansicht",
-      "zbll_pictures_top": "Oben",
-      "zbll_pictures_side": "Seite",
       "timer_update": "Timer-Aktualisierung",
       "timer_update_on": "Ein",
       "timer_update_off": "Aus",
@@ -105,10 +102,9 @@
       "navigate": "Zu vorherigem / nächstem / erstem / letztem Ergebnis in den Statistiken wechseln"
     },
     "contact": {
-      "contact": "Kontakt",
-      "reach_out": "Kontaktiere den Entwickler",
-      "get_the_code": "Quellcode herunterladen",
-      "support": "Unterstütze das Projekt"
+      "contact": "Info",
+      "get_the_code": "Quellcode",
+      "credits": "Credits"
     }
   }
 }

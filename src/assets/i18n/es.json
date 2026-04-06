@@ -45,9 +45,6 @@
       "scramble_size": "Tamaño de la mezcla",
       "timer_size": "Tamaño del temporizador",
       "timer_font": "Fuente del temporizador",
-      "zbll_pictures_view": "Vista de imágenes de ZBLL",
-      "zbll_pictures_top": "Superior",
-      "zbll_pictures_side": "Lateral",
       "timer_update": "Actualización del temporizador",
       "timer_update_on": "Activado",
       "timer_update_off": "Desactivado",
@@ -102,9 +99,8 @@
     },
     "contact": {
       "contact": "Contacto",
-      "reach_out": "Comunícate con el desarrollador",
       "get_the_code": "Obtener el código fuente",
-      "support": "Apoya el proyecto"
+      "credits": "Credits"
     }
   }
 }

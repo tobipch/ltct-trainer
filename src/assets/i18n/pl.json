@@ -46,9 +46,6 @@
       "scramble_size": "Rozmiar scrambla",
       "timer_size": "Rozmiar timera",
       "timer_font": "Czcionka timera",
-      "zbll_pictures_view": "Widok obrazków ZBLL",
-      "zbll_pictures_top": "Góra",
-      "zbll_pictures_side": "Bok",
       "timer_update": "Aktualizacja timera",
       "timer_update_on": "Włączona",
       "timer_update_off": "Wyłączona",
@@ -103,9 +100,8 @@
     },
     "contact": {
       "contact": "Kontakt",
-      "reach_out": "Skontaktuj się z programistą",
       "get_the_code": "Pobierz kod źródłowy",
-      "support": "Wesprzyj projekt"
+      "credits": "Credits"
     }
   }
 }

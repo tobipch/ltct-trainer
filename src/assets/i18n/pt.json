@@ -46,9 +46,6 @@
       "scramble_size": "Tamanho do embaralhamento",
       "timer_size": "Tamanho do cronômetro",
       "timer_font": "Fonte do cronômetro",
-      "zbll_pictures_view": "Visualização de imagens ZBLL",
-      "zbll_pictures_top": "Superior",
-      "zbll_pictures_side": "Lateral",
       "timer_update": "Atualização do cronômetro",
       "timer_update_on": "Ligado",
       "timer_update_off": "Desligado",
@@ -103,9 +100,8 @@
     },
     "contact": {
       "contact": "Contato",
-      "reach_out": "Entre em contato com o desenvolvedor",
       "get_the_code": "Obter o código-fonte",
-      "support": "Apoiar o projeto"
+      "credits": "Credits"
     }
   }
 }

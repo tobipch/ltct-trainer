@@ -46,9 +46,6 @@
       "scramble_size": "스크램블 크기",
       "timer_size": "타이머 크기",
       "timer_font": "타이머 글꼴",
-      "zbll_pictures_view": "ZBLL 이미지 보기",
-      "zbll_pictures_top": "위",
-      "zbll_pictures_side": "옆",
       "timer_update": "타이머 업데이트",
       "timer_update_on": "켜짐",
       "timer_update_off": "꺼짐",
@@ -103,9 +100,8 @@
     },
     "contact": {
       "contact": "연락하기",
-      "reach_out": "개발자에게 연락하기",
       "get_the_code": "소스 코드 가져오기",
-      "support": "프로젝트 지원"
+      "credits": "Credits"
     }
   }
 }

@@ -46,9 +46,6 @@
       "scramble_size": "Ukuran acakan",
       "timer_size": "Ukuran timer",
       "timer_font": "timer font",
-      "zbll_pictures_view": "tampilan gambar ZBLL",
-      "zbll_pictures_top": "Atas",
-      "zbll_pictures_side": "Samping",
       "timer_update": "Pembaruan timer",
       "timer_update_on": "Aktif",
       "timer_update_off": "Mati",
@@ -103,9 +100,8 @@
     },
     "contact": {
       "contact": "Kontak",
-      "reach_out": "Hubungi orang pengembang",
       "get_the_code": "Dapatkan kode sumbernya",
-      "support": "Dukung projek ini"
+      "credits": "Credits"
     }
   }
 }

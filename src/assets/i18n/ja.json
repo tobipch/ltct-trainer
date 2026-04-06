@@ -46,9 +46,6 @@
       "scramble_size": "スクランブルのサイズ",
       "timer_size": "タイマーのサイズ",
       "timer_font": "タイマーのフォント",
-      "zbll_pictures_view": "ZBLL の画像表示",
-      "zbll_pictures_top": "上",
-      "zbll_pictures_side": "横",
       "timer_update": "タイマーの更新",
       "timer_update_on": "オン",
       "timer_update_off": "オフ",
@@ -103,9 +100,8 @@
     },
     "contact": {
       "contact": "お問い合わせ",
-      "reach_out": "開発者に連絡する",
       "get_the_code": "ソースコードを取得する",
-      "support": "プロジェクトをサポートする"
+      "credits": "Credits"
     }
   }
 }

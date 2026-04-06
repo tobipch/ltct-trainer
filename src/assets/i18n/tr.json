@@ -46,9 +46,6 @@
       "scramble_size": "Karıştırma boyutu",
       "timer_size": "Kronometre boyutu",
       "timer_font": "Kronometre yazı tipi",
-      "zbll_pictures_view": "ZBLL resim görünümü",
-      "zbll_pictures_top": "Üst",
-      "zbll_pictures_side": "Yan",
       "timer_update": "Kronometre güncellemesi",
       "timer_update_on": "Açık",
       "timer_update_off": "Kapalı",
@@ -103,9 +100,8 @@
     },
     "contact": {
       "contact": "İletişim",
-      "reach_out": "Geliştiriciye ulaşın",
       "get_the_code": "Kaynak kodunu edinin",
-      "support": "Projeyi destekleyin"
+      "credits": "Credits"
     }
   }
 }

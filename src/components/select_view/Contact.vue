@@ -3,22 +3,15 @@
 
 <template>
   <div class="">
-    <h5>{{ $t("contact.reach_out") }}</h5>
-    <p>
-      <i class="bi bi-telegram"></i>
-      <a href="https://t.me/roman_strakhov" class="px-2" target="_blank">t.me/roman_strakhov</a>
-    </p>
-
     <h5>{{ $t("contact.get_the_code") }}</h5>
     <p>
       <i class="bi bi-github"></i>
-      <a href="https://github.com/Roman-/zbll" class="px-2" target="_blank">github.com/Roman-/zbll</a>
+      <a href="https://github.com/tobipch/ltct-trainer" class="px-2" target="_blank">github.com/tobipch/ltct-trainer</a>
     </p>
 
-    <h5>{{ $t("contact.support") }}</h5>
+    <h5>{{ $t("contact.credits") }}</h5>
     <p>
-      <i class="bi bi-heart-fill"></i>
-      <a href="https://bestsiteever.net#me" class="px-2" target="_blank"> bestsiteever.net/me</a>
+      Fork of <a href="https://github.com/Roman-/zbll" target="_blank">Roman Strakhov's ZBLL Trainer</a>, adapted for LTCT with permission.
     </p>
   </div>
 </template>

@@ -45,9 +45,6 @@
       "scramble_size": "Skramble grootte",
       "timer_size": "Tydhouer grootte",
       "timer_font": "Tydhouer lettertipe",
-      "zbll_pictures_view": "ZBLL prentjies sien",
-      "zbll_pictures_top": "Bo",
-      "zbll_pictures_side": "Sykant",
       "timer_update": "Tydhouer opdateer",
       "timer_update_on": "Aan",
       "timer_update_off": "Af",
@@ -102,9 +99,8 @@
     },
     "contact": {
       "contact": "Kontak",
-      "reach_out": "Kontak die ontwikkelingspersoon",
       "get_the_code": "Kry die bronkode",
-      "support": "Ondersteun die projek"
+      "credits": "Credits"
     }
   }
 }

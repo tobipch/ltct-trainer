@@ -46,9 +46,6 @@
       "scramble_size": "Размер скрамбла",
       "timer_size": "Размер таймера",
       "timer_font": "Шрифт таймера",
-      "zbll_pictures_view": "Вид изображений ZBLL",
-      "zbll_pictures_top": "Сверху",
-      "zbll_pictures_side": "Сбоку",
       "timer_update": "Обновление таймера",
       "timer_update_on": "Включено",
       "timer_update_off": "Выключено",
@@ -103,9 +100,8 @@
     },
     "contact": {
       "contact": "Контакты",
-      "reach_out": "Связаться с разработчиком",
       "get_the_code": "Исходники",
-      "support": "Поддержать проект"
+      "credits": "Credits"
     }
   }
 }

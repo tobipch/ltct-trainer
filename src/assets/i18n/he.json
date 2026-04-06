@@ -46,9 +46,6 @@
       "scramble_size": "גודל סקרמבל",
       "timer_size": "גודל מונה",
       "timer_font": "גופן מונה",
-      "zbll_pictures_view": "תצוגת תמונות ZBLL",
-      "zbll_pictures_top": "למעלה",
-      "zbll_pictures_side": "לצידי",
       "timer_update": "עדכון מונה",
       "timer_update_on": "פעיל",
       "timer_update_off": "לא פעיל",
@@ -103,9 +100,8 @@
     },
     "contact": {
       "contact": "צור קשר",
-      "reach_out": "צור קשר עם המפתח",
       "get_the_code": "קבל את קוד המקור",
-      "support": "תמוך בפרויקט"
+      "credits": "Credits"
     }
   }
 }

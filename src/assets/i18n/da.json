@@ -45,9 +45,6 @@
       "scramble_size": "Scramble-størrelse",
       "timer_size": "Timer-størrelse",
       "timer_font": "Timer-skrifttype",
-      "zbll_pictures_view": "ZBLL-billedvisning",
-      "zbll_pictures_top": "Øverst",
-      "zbll_pictures_side": "Side",
       "timer_update": "Timer-opdatering",
       "timer_update_on": "Til",
       "timer_update_off": "Fra",
@@ -102,9 +99,8 @@
     },
     "contact": {
       "contact": "Kontakt",
-      "reach_out": "Kontakt udvikleren",
       "get_the_code": "Få kildekoden",
-      "support": "Støt projektet"
+      "credits": "Credits"
     }
   }
 }
