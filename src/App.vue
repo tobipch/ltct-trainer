@@ -29,12 +29,15 @@ session.setSelectedKeys(selected.store.keys)
 </template>
 
 <style>
+:root {
+  --app-gutter: 12px;
+}
 .app-content {
   max-width: 1500px;
   width: 100%;
   margin: 0 auto;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: var(--app-gutter);
+  padding-right: var(--app-gutter);
 }
 </style>
 

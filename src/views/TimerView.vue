@@ -21,9 +21,9 @@ const sessionStore = useSessionStore()
 const settings = useSettingsStore()
 const timerNotRunning = computed(() => sessionStore.timerState === TimerState.NOT_RUNNING)
 const timerWrapClass = computed(() => timerNotRunning.value
-        ? ("col-lg-8 col-md-5 col-12 align-self-start")
-        : "col-12")
-const rightColumnClass = computed(() => timerNotRunning.value ? "col-lg-4 col-md-7 col-12 align-items-start" : "d-none")
+        ? "timer_col align-self-start"
+        : "w-100")
+const rightColumnClass = computed(() => timerNotRunning.value ? "result_col" : "d-none")
 const selectStore = useSelectedStore()
 const presets = usePresetsStore()
 const displayStore = useDisplayStore()
@@ -154,46 +154,34 @@ const onPageTouchEnd = event => {
 </script>
 
 <template>
-  <div class="row p-0">
-    <div class="d-flex flex-column">
-      <div class="row no-gutters">
-        <div class="col-12">
-          <Scramble/>
+  <div>
+    <Scramble/>
+
+    <div class="d-flex flex-wrap">
+      <div
+          class="d-flex flex-column timer_wrap"
+          :class="timerWrapClass">
+        <div
+            class="d-flex align-items-center justify-content-center timer_touch_area"
+            @touchstart="onTimerTouchStart"
+            @touchend="onTimerTouchEnd"
+        >
+          <Timer/>
+        </div>
+        <div v-if="displayStore.showSettings" class="mt-2">
+          <Settings/>
+        </div>
+        <div v-if="displayStore.showStatistics" class="d-sm-none d-block">
+          <StatsCard/>
         </div>
       </div>
 
-      <div class="row">
-
-        <div
-            class="d-flex flex-column p-0 timer_wrap"
-            :class="timerWrapClass">
-          <div
-              class="d-flex align-items-center justify-content-center timer_touch_area"
-              @touchstart="onTimerTouchStart"
-              @touchend="onTimerTouchEnd"
-          >
-            <Timer/>
-          </div>
-          <div v-if="displayStore.showSettings" class="m-2">
-            <Settings/>
-          </div>
-          <div v-if="displayStore.showStatistics" class="d-sm-none d-block">
-            <StatsCard/>
-          </div>
+      <div :class="rightColumnClass">
+        <div class="my-2">
+          <ResultCard v-if="sessionStore.stats().length > sessionStore.observingResult"/>
         </div>
-
-        <div
-            :class="rightColumnClass">
-          <div class="row my-2">
-            <div class="col-12">
-              <ResultCard v-if="sessionStore.stats().length > sessionStore.observingResult"/>
-            </div>
-          </div>
-          <div class="row my-2 d-sm-block d-none">
-            <div class="col-12">
-              <StatsCard/>
-            </div>
-          </div>
+        <div class="my-2 d-sm-block d-none">
+          <StatsCard/>
         </div>
       </div>
     </div>
@@ -207,7 +195,28 @@ const onPageTouchEnd = event => {
 .timer_touch_area {
   padding: 80px 0;
 }
+.timer_col {
+  flex: 0 0 40%;
+}
+.result_col {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+@media (min-width: 992px) {
+  .timer_col {
+    flex: 0 0 66.67%;
+  }
+  .result_col {
+    flex: 0 0 33.33%;
+  }
+}
 @media (max-width: 767.98px) {
+  .timer_col {
+    flex: 0 0 100%;
+  }
+  .result_col {
+    flex: 0 0 100%;
+  }
   .timer_touch_area {
     padding: 70px 0;
   }

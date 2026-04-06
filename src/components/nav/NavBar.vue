@@ -76,8 +76,9 @@ const tinySelectBtnText = computed(() => {
 }
 .navbar-inner {
   max-width: 1500px;
+  width: 100%;
   margin: 0 auto;
-  padding-left: 12px;
-  padding-right: 12px;
+  padding-left: var(--app-gutter);
+  padding-right: var(--app-gutter);
 }
 </style>
