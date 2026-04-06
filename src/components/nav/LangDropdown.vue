@@ -6,7 +6,7 @@ import {setLocaleAndReload, supportedLocales, addTranslationUrl} from "@/locale"
 
 <template>
   <div class="dropdown d-inline">
-    <button class="btn btn-sm btn-outline-info dropdown-toggle"
+    <button class="btn btn-outline-info dropdown-toggle"
             :title="$t('nav.language')"
             tabindex="-1"
             @keydown.space.prevent=""

@@ -23,7 +23,7 @@ const tinySelectBtnText = computed(() => {
 </script>
 
 <template>
-  <nav class="navbar bg-secondary bg-opacity-25 py-lg-3 py-sm-1 py-0 w-100">
+  <nav class="navbar bg-secondary bg-opacity-25 py-lg-3 py-1 w-100">
     <div class="navbar-inner w-100 d-flex align-items-center">
       <div class="me-auto">
         <button
@@ -57,7 +57,7 @@ const tinySelectBtnText = computed(() => {
       <div class="d-flex align-items-center justify-content-end p-0 gap-1">
         <LangDropdown/>
         <button
-            class="btn btn-sm"
+            class="btn"
             tabindex="-1" @keydown.space.prevent=""
             :class="settingsBtnClass"
             @click="displayStore.showSettings = !displayStore.showSettings"
