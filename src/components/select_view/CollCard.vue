@@ -33,9 +33,9 @@ const modalShown = ref(false);
 </script>
 
 <template>
-  <div class="border border-dark" :class="card_bg_class">
+  <div class="border rounded-1" :class="card_bg_class">
     <div
-        class="header p-1 clickable border-bottom border-secondary"
+        class="header p-1 clickable border-bottom"
         @click="modalShown=true"
     >
       <strong class="text-center">

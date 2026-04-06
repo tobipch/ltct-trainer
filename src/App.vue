@@ -20,11 +20,24 @@ session.setSelectedKeys(selected.store.keys)
 </script>
 
 <template>
-  <div class="container-fluid min-vh-100 d-flex flex-column">
-    <div class="row">
-      <NavBar/>
+  <div class="min-vh-100 d-flex flex-column">
+    <NavBar/>
+    <div class="app-content flex-grow-1 d-flex flex-column">
+      <RouterView/>
     </div>
-    <RouterView/>
   </div>
 </template>
+
+<style>
+:root {
+  --app-gutter: 12px;
+}
+.app-content {
+  max-width: 1500px;
+  width: 100%;
+  margin: 0 auto;
+  padding-left: var(--app-gutter);
+  padding-right: var(--app-gutter);
+}
+</style>
 

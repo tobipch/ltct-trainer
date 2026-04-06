@@ -14,7 +14,7 @@ const route = useRoute()
 const displayStore = useDisplayStore()
 
 const isTimerView = computed(() => route.fullPath.endsWith("timer"))
-const settingsBtnClass = computed(() => displayStore.showSettings ? 'bg-info text-white' : 'text-info')
+const settingsBtnClass = computed(() => displayStore.showSettings ? 'btn-info' : 'btn-outline-info')
 const tinySelectBtnText = computed(() => {
   return isTimerView && session.store.recapMode
       ? (session.casesWithZeroCount.length + '/' + selected.totalZbllsSelected())
@@ -23,9 +23,9 @@ const tinySelectBtnText = computed(() => {
 </script>
 
 <template>
-  <nav class="navbar bg-secondary bg-opacity-25 py-lg-3 py-sm-1 py-0">
-    <div class="row w-100 align-items-center">
-      <div class="col-auto me-auto">
+  <nav class="navbar bg-secondary bg-opacity-25 py-lg-3 py-1 w-100">
+    <div class="navbar-inner w-100 d-flex align-items-center">
+      <div class="me-auto">
         <button
             v-if="isTimerView"
             tabindex="-1"
@@ -54,15 +54,15 @@ const tinySelectBtnText = computed(() => {
           {{ $t("nav.n_to_recap", session.casesWithZeroCount.length) }}
         </span>
       </div>
-      <div class="col d-flex justify-content-end p-0">
+      <div class="d-flex align-items-center justify-content-end p-0 gap-1">
         <LangDropdown/>
         <button
-            class="btn btn-link px-1 px-md-3"
+            class="btn"
             tabindex="-1" @keydown.space.prevent=""
             :class="settingsBtnClass"
             @click="displayStore.showSettings = !displayStore.showSettings"
             :title="$t('nav.settings')">
-          <i class="bi-wrench font_bigger"/>
+          <i class="bi-wrench"/>
         </button>
         <ThemeSwitcher/>
       </div>
@@ -73,5 +73,12 @@ const tinySelectBtnText = computed(() => {
 <style scoped>
 .logoText {
   font-weight: 900;
+}
+.navbar-inner {
+  max-width: 1500px;
+  width: 100%;
+  margin: 0 auto;
+  padding-left: var(--app-gutter);
+  padding-right: var(--app-gutter);
 }
 </style>

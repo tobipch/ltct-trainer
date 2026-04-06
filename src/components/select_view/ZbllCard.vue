@@ -26,8 +26,8 @@ const cardBgClass = computed(() => {
 </script>
 
 <template>
-  <div class="border border-secondary" :class="cardBgClass">
-    <div class="header p-1 border-bottom border-secondary border-opacity-75 text-center">
+  <div class="border rounded-1" :class="cardBgClass">
+    <div class="header p-1 border-bottom text-center">
         <small class="opacity-75">{{ twist }}</small>
     </div>
     <div class="m-1 text-center clickable py-2" @click="onCardClicked">

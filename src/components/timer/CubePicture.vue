@@ -18,8 +18,8 @@ function updateDimensions() {
 
 const cubePictureSize = computed(() => {
   const breakpoints = [
-    { breakpoint: 416, pictureSize: 80 },
-    { breakpoint: 576, pictureSize: 100 },
+    { breakpoint: 416, pictureSize: 120 },
+    { breakpoint: 576, pictureSize: 120 },
     { breakpoint: 768, pictureSize: 150 },
     { breakpoint: 960, pictureSize: 200 },
   ];

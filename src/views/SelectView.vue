@@ -20,14 +20,15 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="displayStore.showSettings" class="m-2">
+  <div v-if="displayStore.showSettings" class="mt-2">
     <Settings/>
   </div>
-  <div class="row gy-0 justify-content-start align-items-start">
-    <div class="col">
-      <SelectSideCard/>
-    </div>
-    <div class="col-lg-auto col-sm-12 m-0">
+  <div class="mt-1">
+    <SelectSideCard/>
+  </div>
+  <div class="card mt-2 mb-2">
+    <div class="card-body p-2">
+      <p class="text-muted mb-2">{{ $t("select.select_intro") }}</p>
       <MainZbllGrid/>
     </div>
   </div>

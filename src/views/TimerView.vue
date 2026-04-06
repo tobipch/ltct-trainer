@@ -21,9 +21,9 @@ const sessionStore = useSessionStore()
 const settings = useSettingsStore()
 const timerNotRunning = computed(() => sessionStore.timerState === TimerState.NOT_RUNNING)
 const timerWrapClass = computed(() => timerNotRunning.value
-        ? ("col-lg-8 col-5 " + ((displayStore.showSettings || displayStore.showStatistics) ? "align-self-start" : "h-100"))
-        : "col-12")
-const rightColumnClass = computed(() => timerNotRunning.value ? "col-lg-4 col-7 align-items-start" : "d-none")
+        ? "timer_col align-self-start"
+        : "w-100")
+const rightColumnClass = computed(() => timerNotRunning.value ? "result_col" : "d-none")
 const selectStore = useSelectedStore()
 const presets = usePresetsStore()
 const displayStore = useDisplayStore()
@@ -103,6 +103,8 @@ const onGlobalKeyUp = (event) => {
 onMounted(() => {
   window.addEventListener('keydown', onGlobalKeyDown);
   window.addEventListener('keyup', onGlobalKeyUp);
+  document.addEventListener('touchstart', onPageTouchStart);
+  document.addEventListener('touchend', onPageTouchEnd);
   sessionStore.timerState = TimerState.NOT_RUNNING
   sessionStore.observingResult = Math.max(sessionStore.stats().length - 1, 0)
 });
@@ -110,6 +112,8 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('keydown', onGlobalKeyDown);
   window.removeEventListener('keyup', onGlobalKeyUp);
+  document.removeEventListener('touchstart', onPageTouchStart);
+  document.removeEventListener('touchend', onPageTouchEnd);
   sessionStore.timerState = TimerState.NOT_RUNNING
 });
 
@@ -133,49 +137,51 @@ const onTimerTouchEnd = event => {
   event.preventDefault()
 }
 
+// Stop timer from anywhere on screen
+const onPageTouchStart = event => {
+  if (sessionStore.timerState === TimerState.RUNNING) {
+    sessionStore.stopTimer()
+    event.preventDefault()
+  }
+}
+const onPageTouchEnd = event => {
+  if (sessionStore.timerState === TimerState.STOPPING) {
+    sessionStore.timerState = TimerState.NOT_RUNNING
+    event.preventDefault()
+  }
+}
+
 </script>
 
 <template>
-  <div class="row flex-grow-1 p-0">
-    <div class="d-flex flex-column">
-      <div class="row no-gutters">
-        <div class="col-12">
-          <Scramble/>
+  <div>
+    <Scramble/>
+
+    <div class="d-flex flex-wrap">
+      <div
+          class="d-flex flex-column timer_wrap"
+          :class="timerWrapClass">
+        <div
+            class="d-flex align-items-center justify-content-center timer_touch_area"
+            @touchstart="onTimerTouchStart"
+            @touchend="onTimerTouchEnd"
+        >
+          <Timer/>
+        </div>
+        <div v-if="displayStore.showSettings" class="mt-2">
+          <Settings/>
+        </div>
+        <div v-if="displayStore.showStatistics" class="d-sm-none d-block">
+          <StatsCard/>
         </div>
       </div>
 
-      <div class="row flex-grow-1">
-
-        <div
-            class="d-flex flex-column p-0 timer_wrap"
-            :class="timerWrapClass">
-          <div
-              class="flex-grow-1 d-flex align-items-center justify-content-center"
-              @touchstart="onTimerTouchStart"
-              @touchend="onTimerTouchEnd"
-          >
-            <Timer/>
-          </div>
-          <div v-if="displayStore.showSettings">
-            <Settings/>
-          </div>
-          <div v-if="displayStore.showStatistics" class="d-sm-none d-block">
-            <StatsCard/>
-          </div>
+      <div :class="rightColumnClass">
+        <div class="my-2">
+          <ResultCard v-if="sessionStore.stats().length > sessionStore.observingResult"/>
         </div>
-
-        <div
-            :class="rightColumnClass">
-          <div class="row my-2">
-            <div class="col-12">
-              <ResultCard v-if="sessionStore.stats().length > sessionStore.observingResult"/>
-            </div>
-          </div>
-          <div class="row my-2 d-sm-block d-none">
-            <div class="col-12">
-              <StatsCard/>
-            </div>
-          </div>
+        <div class="my-2 d-sm-block d-none">
+          <StatsCard/>
         </div>
       </div>
     </div>
@@ -185,5 +191,34 @@ const onTimerTouchEnd = event => {
 <style scoped>
 .timer_wrap {
   transition: width 0.1s ease-in-out;
+}
+.timer_touch_area {
+  padding: 80px 0;
+}
+.timer_col {
+  flex: 0 0 40%;
+}
+.result_col {
+  flex: 1 1 0%;
+  min-width: 0;
+}
+@media (min-width: 992px) {
+  .timer_col {
+    flex: 0 0 66.67%;
+  }
+  .result_col {
+    flex: 0 0 33.33%;
+  }
+}
+@media (max-width: 767.98px) {
+  .timer_col {
+    flex: 0 0 100%;
+  }
+  .result_col {
+    flex: 0 0 100%;
+  }
+  .timer_touch_area {
+    padding: 70px 0;
+  }
 }
 </style>

@@ -78,7 +78,4 @@ const settings = useSettingsStore()
 </template>
 
 <style scoped>
-#sideMenu {
-  min-width: 300px;
-}
 </style>
