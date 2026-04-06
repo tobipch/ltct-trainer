@@ -103,6 +103,8 @@ const onGlobalKeyUp = (event) => {
 onMounted(() => {
   window.addEventListener('keydown', onGlobalKeyDown);
   window.addEventListener('keyup', onGlobalKeyUp);
+  document.addEventListener('touchstart', onPageTouchStart);
+  document.addEventListener('touchend', onPageTouchEnd);
   sessionStore.timerState = TimerState.NOT_RUNNING
   sessionStore.observingResult = Math.max(sessionStore.stats().length - 1, 0)
 });
@@ -110,6 +112,8 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('keydown', onGlobalKeyDown);
   window.removeEventListener('keyup', onGlobalKeyUp);
+  document.removeEventListener('touchstart', onPageTouchStart);
+  document.removeEventListener('touchend', onPageTouchEnd);
   sessionStore.timerState = TimerState.NOT_RUNNING
 });
 
@@ -131,6 +135,20 @@ const onTimerTouchEnd = event => {
     sessionStore.timerState = TimerState.NOT_RUNNING // reset
   }
   event.preventDefault()
+}
+
+// Stop timer from anywhere on screen
+const onPageTouchStart = event => {
+  if (sessionStore.timerState === TimerState.RUNNING) {
+    sessionStore.stopTimer()
+    event.preventDefault()
+  }
+}
+const onPageTouchEnd = event => {
+  if (sessionStore.timerState === TimerState.STOPPING) {
+    sessionStore.timerState = TimerState.NOT_RUNNING
+    event.preventDefault()
+  }
 }
 
 </script>
@@ -156,7 +174,7 @@ const onTimerTouchEnd = event => {
           >
             <Timer/>
           </div>
-          <div v-if="displayStore.showSettings">
+          <div v-if="displayStore.showSettings" class="m-2">
             <Settings/>
           </div>
           <div v-if="displayStore.showStatistics" class="d-sm-none d-block">
@@ -188,5 +206,10 @@ const onTimerTouchEnd = event => {
 }
 .timer_touch_area {
   padding: 80px 0;
+}
+@media (max-width: 767.98px) {
+  .timer_touch_area {
+    padding: 70px 0;
+  }
 }
 </style>

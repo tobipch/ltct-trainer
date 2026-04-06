@@ -22,7 +22,7 @@ const onResetBtnClicked = () => {
 </script>
 
 <template>
-  <div class="container border border-2 border-primary rounded-3 p-3 mx-2">
+  <div class="card"><div class="card-body">
     <div class="d-lg-flex d-block align-items-center mb-3">
       <span class="h2 flex-grow-1">{{ $t("settings.settings_title") }}</span>
       <div class="d-lg-none d-block"><br></div>
@@ -148,7 +148,7 @@ const onResetBtnClicked = () => {
       </div>
 
     </form>
-  </div>
+  </div></div>
 </template>
 
 <style scoped>

@@ -25,7 +25,7 @@ const appendix = computed(() => settings.store.scrambleAppendix === "None" ? "" 
 
 <style scoped>
 .scramble-bar {
-  padding: 10px;
+  padding: 10px 0;
   margin: 0;
 }
 </style>

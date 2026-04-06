@@ -57,7 +57,7 @@ const starClicked = () => {
 
 <template>
   <div class="card">
-    <div class="card-body">
+    <div class="card-body p-2 p-sm-3">
       <h5 class="mb-0">
         <div class="row align-items-center">
           <div class="col">
@@ -76,44 +76,54 @@ const starClicked = () => {
           </div>
         </div>
       </h5>
-      <hr class="my-2 my-sm-3">
-      <p class="card-text my-0 my-sm-1">
-        <span class="d-sm-inline-block d-none">{{$t("result_card.case")}}</span>
-        <span class="fw-bold mx-1">{{ parsed.letters }}</span>
-        <small class="opacity-75">({{ result["key"] }})</small>
-        <i
-            class="bi clickable px-1"
-            :title="$t('result_card.add_to_starred') + ' (Alt+A)'"
-            :class="bookmarkIconClass"
-            @click="starClicked"/>
-      </p>
-      <ZbllNote :zbllKey="result['key']"/>
-      <div class="form-check mt-1">
-        <label
-            class="form-check-label"
-            :title="$t('result_card.selected_title') + ' (Alt+S)'"
-            for="flexCheckDefault">
-          <input
-              tabindex="-1" @keydown.space.prevent=""
-              class="form-check-input styled"
-              type="checkbox"
-              id="flexCheckDefault"
-              :disabled="sessionStore.timerState !== TimerState.NOT_RUNNING"
-              v-model="isSelectedCheckboxValue">
-          {{$t("result_card.selected")}}
-        </label>
+      <hr class="my-1 my-sm-3">
+      <div class="d-flex align-items-start">
+        <div class="flex-grow-1 min-width-0">
+          <p class="card-text my-0 my-sm-1">
+            <span class="d-sm-inline-block d-none">{{$t("result_card.case")}}</span>
+            <span class="fw-bold mx-1">{{ parsed.letters }}</span>
+            <small class="opacity-75">({{ result["key"] }})</small>
+            <i
+                class="bi clickable px-1"
+                :title="$t('result_card.add_to_starred') + ' (Alt+A)'"
+                :class="bookmarkIconClass"
+                @click="starClicked"/>
+          </p>
+          <ZbllNote :zbllKey="result['key']"/>
+          <div class="form-check mt-1">
+            <label
+                class="form-check-label"
+                :title="$t('result_card.selected_title') + ' (Alt+S)'"
+                for="flexCheckDefault">
+              <input
+                  tabindex="-1" @keydown.space.prevent=""
+                  class="form-check-input styled"
+                  type="checkbox"
+                  id="flexCheckDefault"
+                  :disabled="sessionStore.timerState !== TimerState.NOT_RUNNING"
+                  v-model="isSelectedCheckboxValue">
+              {{$t("result_card.selected")}}
+            </label>
+          </div>
+          <p class="card-text my-0 my-sm-1">
+            <SetupAndAlgs :zbllKey="result['key']" :maxAmount="3"/>
+          </p>
+          <p class="d-sm-block d-none card-text my-0 my-sm-1">
+            <span class="">{{$t("result_card.scramble")}}&nbsp;</span>
+            {{ result["scramble"] }}
+          </p>
+        </div>
+        <div class="cube-picture-col ms-2">
+          <CubePicture :scramble="result['scramble']"/>
+        </div>
       </div>
-      <CubePicture :scramble="result['scramble']"/>
-      <p class="card-text my-0 my-sm-1">
-        <SetupAndAlgs :zbllKey="result['key']" :maxAmount="3"/>
-      </p>
-      <p class="d-sm-block d-none card-text my-0 my-sm-1">
-        <span class="">{{$t("result_card.scramble")}}&nbsp;</span>
-        {{ result["scramble"] }}
-      </p>
     </div>
   </div>
 </template>
 
 <style scoped>
+.cube-picture-col {
+  flex-shrink: 0;
+  min-width: 120px;
+}
 </style>
