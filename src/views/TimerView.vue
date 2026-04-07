@@ -194,7 +194,7 @@ const onPageTouchEnd = event => {
         >
           <div v-if="showDidntKnow" class="didnt-know-wrap">
             <button
-                class="btn btn-sm btn-outline-danger"
+                class="btn btn-sm didnt-know-btn"
                 :class="{ active: isDidntKnowActive }"
                 tabindex="-1"
                 @click.stop="onDidntKnowClick"
@@ -273,6 +273,23 @@ const onPageTouchEnd = event => {
   left: 8px;
   z-index: 1;
 }
+.didnt-know-btn {
+  color: var(--bs-secondary);
+  border-color: var(--bs-secondary);
+  opacity: 0.7;
+}
+.didnt-know-btn:hover {
+  color: var(--bs-danger);
+  border-color: var(--bs-danger);
+  background: transparent;
+  opacity: 1;
+}
+.didnt-know-btn.active {
+  color: var(--bs-danger);
+  border-color: var(--bs-danger);
+  background: transparent;
+  opacity: 1;
+}
 .didnt-know-help-wrap {
   position: relative;
   display: inline-block;
@@ -284,22 +301,29 @@ const onPageTouchEnd = event => {
 .didnt-know-tooltip {
   display: none;
   position: absolute;
-  left: 50%;
-  top: 100%;
-  transform: translateX(-50%);
-  margin-top: 4px;
+  left: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
   padding: 4px 8px;
   background: var(--bs-dark, #333);
   color: var(--bs-light, #fff);
   border-radius: 4px;
   font-size: 0.75rem;
   white-space: nowrap;
-  z-index: 2;
+  z-index: 10;
   pointer-events: none;
 }
 .didnt-know-help:hover + .didnt-know-tooltip,
 .didnt-know-help:active + .didnt-know-tooltip,
 .didnt-know-help:focus + .didnt-know-tooltip {
   display: block;
+}
+@media (max-width: 767.98px) {
+  .didnt-know-tooltip {
+    left: 50%;
+    top: auto;
+    bottom: calc(100% + 8px);
+    transform: translateX(-50%);
+  }
 }
 </style>
