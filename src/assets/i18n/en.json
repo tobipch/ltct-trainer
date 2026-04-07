@@ -71,7 +71,9 @@
       "no_scramble": "no scramble available",
       "scramble": "Scramble:",
       "ready": "ready",
-      "running": "running"
+      "running": "running",
+      "didnt_know": "Didn't know",
+      "didnt_know_tooltip": "Prioritize this case temporarily so it repeats sooner"
     },
     "stats_card": {
       "stats_title": "Stats:",

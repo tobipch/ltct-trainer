@@ -187,11 +187,19 @@ export const useSessionStore = defineStore('session', () => {
         setRandomCase()
     }
 
+    const flagDidntKnow = (key) => {
+        const emas = store.keys.map(k => srsData[k]?.a).filter(a => a != null)
+        const med = median(emas)
+        if (!srsData[key]) srsData[key] = { a: null, n: 0, s: 0 }
+        srsData[key].a = med * 5
+        localStorage.setItem(srsKey, JSON.stringify(srsData))
+    }
+
     // may be undefined
     const currentScramble = computed(() => store.currentScramble)
 
-    return { store, clearSession, setSelectedKeys, stats, deleteResult,
+    return { store, srsData, clearSession, setSelectedKeys, stats, deleteResult,
         observingResult, timerStarted, timerState, getTimerReady, startTimer, stopTimer,
-        startRecap, currentScramble, casesWithZeroCount
+        startRecap, currentScramble, casesWithZeroCount, flagDidntKnow
     }
 });

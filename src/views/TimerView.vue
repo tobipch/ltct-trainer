@@ -10,7 +10,7 @@ const {t} = useI18n()
 import {TimerState, useSessionStore} from "@/stores/SessionStore";
 import {useRouter} from "vue-router";
 import Settings from "@/components/Settings.vue";
-import {computed, onMounted, onUnmounted} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import {useSelectedStore} from "@/stores/SelectedStore";
 import {useSettingsStore} from "@/stores/SettingsStore"
 import {usePresetsStore, starredName} from "@/stores/PresetStore";
@@ -20,6 +20,26 @@ const router = useRouter();
 const sessionStore = useSessionStore()
 const settings = useSettingsStore()
 const timerNotRunning = computed(() => sessionStore.timerState === TimerState.NOT_RUNNING)
+const didntKnowConfirmed = ref(false)
+
+const showDidntKnow = computed(() =>
+    timerNotRunning.value
+    && sessionStore.stats().length > 0
+    && settings.store.smartSelection
+)
+
+const currentResultKey = computed(() => {
+    const s = sessionStore.stats()
+    return sessionStore.observingResult < s.length ? s[sessionStore.observingResult].key : null
+})
+
+const onDidntKnowClick = () => {
+    if (currentResultKey.value) {
+        sessionStore.flagDidntKnow(currentResultKey.value)
+        didntKnowConfirmed.value = true
+        setTimeout(() => { didntKnowConfirmed.value = false }, 1000)
+    }
+}
 const timerWrapClass = computed(() => timerNotRunning.value
         ? "timer_col align-self-start"
         : "w-100")
@@ -80,6 +100,8 @@ const onGlobalKeyDown = event => {
     selectStore.toggleSelected(sessionStore.stats()[sessionStore.observingResult])
   } else if (event.key === "a" && event.altKey && sessionStore.observingResult < sessionStore.stats().length) {
     presets.toggleAddRemove(starredName, sessionStore.stats()[sessionStore.observingResult].key)
+  } else if (event.key === "f" && event.altKey && sessionStore.observingResult < sessionStore.stats().length) {
+    onDidntKnowClick()
   } else {
     return // do NOT prevent default
   }
@@ -162,10 +184,28 @@ const onPageTouchEnd = event => {
           class="d-flex flex-column timer_wrap"
           :class="timerWrapClass">
         <div
-            class="d-flex align-items-center justify-content-center timer_touch_area"
+            class="d-flex align-items-center justify-content-center timer_touch_area position-relative"
             @touchstart="onTimerTouchStart"
             @touchend="onTimerTouchEnd"
         >
+          <div v-if="showDidntKnow" class="didnt-know-wrap">
+            <button
+                class="btn btn-sm"
+                :class="didntKnowConfirmed ? 'btn-success' : 'btn-outline-secondary'"
+                tabindex="-1"
+                @click.stop="onDidntKnowClick"
+                @mousedown.stop=""
+                @touchstart.stop="onDidntKnowClick"
+                @keydown.space.prevent="">
+              <template v-if="didntKnowConfirmed"><i class="bi bi-check-lg"></i></template>
+              <template v-else>{{ $t("timer.didnt_know") }}</template>
+            </button>
+            <i class="bi bi-question-circle ms-1 text-muted didnt-know-help"
+               :title="$t('timer.didnt_know_tooltip')"
+               @click.stop=""
+               @mousedown.stop=""
+               @touchstart.stop=""></i>
+          </div>
           <Timer/>
         </div>
         <div v-if="displayStore.showSettings" class="mt-2">
@@ -220,5 +260,15 @@ const onPageTouchEnd = event => {
   .timer_touch_area {
     padding: 70px 0;
   }
+}
+.didnt-know-wrap {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1;
+}
+.didnt-know-help {
+  cursor: pointer;
+  font-size: 0.85rem;
 }
 </style>

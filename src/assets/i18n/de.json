@@ -70,7 +70,9 @@
       "no_scramble": "kein Mischvorgang verfügbar",
       "scramble": "Mischung:",
       "ready": "bereit",
-      "running": "läuft"
+      "running": "läuft",
+      "didnt_know": "Nicht gewusst",
+      "didnt_know_tooltip": "Diesen Fall vorübergehend priorisieren, damit er früher wiederholt wird"
     },
     "stats_card": {
       "stats_title": "Statistiken:",
