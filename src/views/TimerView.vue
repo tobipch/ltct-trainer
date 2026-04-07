@@ -25,6 +25,7 @@ const showDidntKnow = computed(() =>
     timerNotRunning.value
     && sessionStore.stats().length > 0
     && settings.store.smartSelection
+    && !sessionStore.store.recapMode
 )
 
 const currentResultKey = computed(() => {
