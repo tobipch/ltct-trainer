@@ -2,10 +2,14 @@ import {defineStore} from 'pinia'
 import {computed, reactive, ref, watch} from "vue";
 import {random_element} from "@/helpers/helpers";
 import {makeScramble} from "@/helpers/scramble_utils"
+import {updateEma, caseWeight, weightedRandomPick, median} from "@/helpers/srs"
+import {useSettingsStore} from "@/stores/SettingsStore"
 
 const statsKey = 'ltct_stats_array';
 const initialStats = JSON.parse(localStorage.getItem(statsKey)) || []
 const storeKey = 'ltct_store';
+const srsKey = 'ltct_srs';
+const srsCounterKey = 'ltct_srs_counter';
 
 const initialStore = JSON.parse(localStorage.getItem(storeKey)) || {
     // array of keys selected
@@ -36,6 +40,8 @@ export const TimerState = Object.freeze({
 // store for current case/scramble and stats
 export const useSessionStore = defineStore('session', () => {
     const store = reactive(initialStore)
+    const srsData = reactive(JSON.parse(localStorage.getItem(srsKey)) || {})
+    const srsCounter = ref(parseInt(localStorage.getItem(srsCounterKey)) || 0)
 
     const timerState = ref(TimerState.NOT_RUNNING)
 
@@ -81,13 +87,29 @@ export const useSessionStore = defineStore('session', () => {
             }
             store.currentKey = random_element(casesWithZeroCount.value)
         } else {
-            if (Math.random() < 0.2) {
-                // set current key to the least counted one (random if multiple)
-                const minCount = Math.min(...Object.values(store.keysCount))
-                const leastCountedKeys = Object.keys(store.keysCount).filter(key => store.keysCount[key] === minCount)
-                store.currentKey = random_element(leastCountedKeys)
+            const settingsStore = useSettingsStore()
+            if (settingsStore.store.smartSelection) {
+                const emas = store.keys
+                    .map(k => srsData[k]?.a)
+                    .filter(a => a != null)
+                const med = median(emas)
+                const entries = store.keys.map(key => ({
+                    key,
+                    weight: caseWeight(
+                        srsData[key] || { a: null, n: 0, s: 0 },
+                        med, srsCounter.value, store.keys.length,
+                        settingsStore.store
+                    )
+                }))
+                store.currentKey = weightedRandomPick(entries)
             } else {
-                store.currentKey = random_element(store.keys)
+                if (Math.random() < 0.2) {
+                    const minCount = Math.min(...Object.values(store.keysCount))
+                    const leastCountedKeys = Object.keys(store.keysCount).filter(key => store.keysCount[key] === minCount)
+                    store.currentKey = random_element(leastCountedKeys)
+                } else {
+                    store.currentKey = random_element(store.keys)
+                }
             }
         }
         store.currentScramble = makeScramble(store.currentKey)
@@ -132,13 +154,25 @@ export const useSessionStore = defineStore('session', () => {
         const index = store.stats.length
         if (store.currentKey !== null) {
             const key = store.currentKey
+            const ms = Date.now() - timerStarted.value
             store.stats.push({
                 "i": index,
                 "key": key,
                 "scramble": currentScramble.value,
-                "ms": Date.now() - timerStarted.value
+                "ms": ms
             })
             store.keysCount[key]++;
+
+            // Update SRS data
+            srsCounter.value++
+            const old = srsData[key] || { a: null, n: 0, s: 0 }
+            srsData[key] = {
+                a: updateEma(old.a, ms / 1000),
+                n: old.n + 1,
+                s: srsCounter.value
+            }
+            localStorage.setItem(srsKey, JSON.stringify(srsData))
+            localStorage.setItem(srsCounterKey, srsCounter.value)
         }
         setRandomCase()
         timerState.value = TimerState.STOPPING;

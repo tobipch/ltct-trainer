@@ -59,7 +59,12 @@
       "cube_orientation": "Würfelorientierung",
       "cube_orientation_hint": "Rotation für die Würfelanzeige, z.B. y, x2, x y (max. 2 Rotationen)",
       "letter_scheme": "Buchstabenschema",
-      "reset_confirm": "Buchstabenschema auf Speffz zurücksetzen?"
+      "reset_confirm": "Buchstabenschema auf Speffz zurücksetzen?",
+      "smart_selection": "Intelligente Fallauswahl",
+      "speed_emphasis": "Geschwindigkeitsgewichtung",
+      "speed_emphasis_hint": "Wie stark langsame Fälle bevorzugt werden (0 = ignorieren, 4 = stark)",
+      "recency_emphasis": "Aktualitätsgewichtung",
+      "recency_emphasis_hint": "Wie schnell nicht geübte Fälle wieder auftauchen (0 = ignorieren, 2 = aggressiv)"
     },
     "timer": {
       "no_scramble": "kein Mischvorgang verfügbar",

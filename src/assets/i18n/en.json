@@ -60,7 +60,12 @@
       "cube_orientation": "Cube orientation",
       "cube_orientation_hint": "Rotation applied to the cube display, e.g. y, x2, x y (max 2 rotations)",
       "letter_scheme": "Letter Scheme",
-      "reset_confirm": "Reset letter scheme to Speffz?"
+      "reset_confirm": "Reset letter scheme to Speffz?",
+      "smart_selection": "Smart case selection",
+      "speed_emphasis": "Speed emphasis",
+      "speed_emphasis_hint": "How much to prioritize slow cases (0 = ignore, 4 = heavy)",
+      "recency_emphasis": "Recency emphasis",
+      "recency_emphasis_hint": "How quickly to resurface cases you haven't practiced (0 = ignore, 2 = aggressive)"
     },
     "timer": {
       "no_scramble": "no scramble available",
