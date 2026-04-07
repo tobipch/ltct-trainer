@@ -137,6 +137,39 @@ const onResetBtnClicked = () => {
       </div>
       <hr>
 
+      <div class="mb-3">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch"
+                 v-model="settings.store.smartSelection" id="smartSelection"
+                 tabindex="-1" @keydown.space.prevent="">
+          <label class="form-check-label" for="smartSelection">{{ $t("settings.smart_selection") }}</label>
+        </div>
+      </div>
+
+      <div v-if="settings.store.smartSelection" class="mb-3 ms-1">
+        <label for="slownessPower" class="form-label">
+          {{ $t("settings.speed_emphasis") }}: {{ settings.store.slownessPower }}
+        </label>
+        <input type="range" class="form-range" id="slownessPower"
+               min="0" max="4" step="0.5"
+               v-model.number="settings.store.slownessPower"
+               tabindex="-1" @keydown.space.prevent="">
+        <small class="text-muted">{{ $t("settings.speed_emphasis_hint") }}</small>
+      </div>
+
+      <div v-if="settings.store.smartSelection" class="mb-3 ms-1">
+        <label for="recencyDecay" class="form-label">
+          {{ $t("settings.recency_emphasis") }}: {{ settings.store.recencyDecay }}
+        </label>
+        <input type="range" class="form-range" id="recencyDecay"
+               min="0" max="2" step="0.1"
+               v-model.number="settings.store.recencyDecay"
+               tabindex="-1" @keydown.space.prevent="">
+        <small class="text-muted">{{ $t("settings.recency_emphasis_hint") }}</small>
+      </div>
+
+      <hr>
+
       <div class="mb-2">
         <label for="DarkTheme" class="form-label">{{ $t("settings.dark_theme") }}</label>
         <ThemesSelect selectId="DarkTheme" is-dark="true"/>

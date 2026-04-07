@@ -14,6 +14,9 @@ const defaultSettings = {
     timerStartDelayMs: 100,
     scrambleAppendix: "None",
     cubeOrientation: "",
+    smartSelection: true,
+    slownessPower: 2,
+    recencyDecay: 0.5,
 }
 
 const localStorageKey = "zbllTrainerSettings"

@@ -10,7 +10,7 @@ const {t} = useI18n()
 import {TimerState, useSessionStore} from "@/stores/SessionStore";
 import {useRouter} from "vue-router";
 import Settings from "@/components/Settings.vue";
-import {computed, onMounted, onUnmounted} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 import {useSelectedStore} from "@/stores/SelectedStore";
 import {useSettingsStore} from "@/stores/SettingsStore"
 import {usePresetsStore, starredName} from "@/stores/PresetStore";
@@ -20,6 +20,30 @@ const router = useRouter();
 const sessionStore = useSessionStore()
 const settings = useSettingsStore()
 const timerNotRunning = computed(() => sessionStore.timerState === TimerState.NOT_RUNNING)
+const showDidntKnow = computed(() =>
+    timerNotRunning.value
+    && sessionStore.stats().length > 0
+    && settings.store.smartSelection
+)
+
+const currentResultKey = computed(() => {
+    const s = sessionStore.stats()
+    return sessionStore.observingResult < s.length ? s[sessionStore.observingResult].key : null
+})
+
+const isDidntKnowActive = computed(() =>
+    currentResultKey.value && currentResultKey.value in sessionStore.didntKnowMap
+)
+
+const onDidntKnowClick = () => {
+    if (currentResultKey.value) {
+        if (isDidntKnowActive.value) {
+            sessionStore.unflagDidntKnow(currentResultKey.value)
+        } else {
+            sessionStore.flagDidntKnow(currentResultKey.value)
+        }
+    }
+}
 const timerWrapClass = computed(() => timerNotRunning.value
         ? "timer_col align-self-start"
         : "w-100")
@@ -80,6 +104,8 @@ const onGlobalKeyDown = event => {
     selectStore.toggleSelected(sessionStore.stats()[sessionStore.observingResult])
   } else if (event.key === "a" && event.altKey && sessionStore.observingResult < sessionStore.stats().length) {
     presets.toggleAddRemove(starredName, sessionStore.stats()[sessionStore.observingResult].key)
+  } else if (event.key === "f" && event.altKey && sessionStore.observingResult < sessionStore.stats().length) {
+    onDidntKnowClick()
   } else {
     return // do NOT prevent default
   }
@@ -162,10 +188,30 @@ const onPageTouchEnd = event => {
           class="d-flex flex-column timer_wrap"
           :class="timerWrapClass">
         <div
-            class="d-flex align-items-center justify-content-center timer_touch_area"
+            class="d-flex align-items-center justify-content-center timer_touch_area position-relative"
             @touchstart="onTimerTouchStart"
             @touchend="onTimerTouchEnd"
         >
+          <div v-if="showDidntKnow" class="didnt-know-wrap">
+            <button
+                class="btn btn-sm btn-outline-danger"
+                :class="{ active: isDidntKnowActive }"
+                tabindex="-1"
+                @click.stop="onDidntKnowClick"
+                @mousedown.stop=""
+                @touchstart.stop.prevent="onDidntKnowClick"
+                @keydown.space.prevent="">
+              <i class="bi" :class="isDidntKnowActive ? 'bi-check-square' : 'bi-square'"></i>
+              {{ $t("timer.didnt_know") }}
+            </button>
+            <span class="didnt-know-help-wrap">
+              <i class="bi bi-question-circle ms-1 text-muted didnt-know-help"
+                 @click.stop=""
+                 @mousedown.stop=""
+                 @touchstart.stop.prevent=""></i>
+              <span class="didnt-know-tooltip">{{ $t('timer.didnt_know_tooltip') }}</span>
+            </span>
+          </div>
           <Timer/>
         </div>
         <div v-if="displayStore.showSettings" class="mt-2">
@@ -220,5 +266,40 @@ const onPageTouchEnd = event => {
   .timer_touch_area {
     padding: 70px 0;
   }
+}
+.didnt-know-wrap {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 1;
+}
+.didnt-know-help-wrap {
+  position: relative;
+  display: inline-block;
+}
+.didnt-know-help {
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.didnt-know-tooltip {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  margin-top: 4px;
+  padding: 4px 8px;
+  background: var(--bs-dark, #333);
+  color: var(--bs-light, #fff);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 2;
+  pointer-events: none;
+}
+.didnt-know-help:hover + .didnt-know-tooltip,
+.didnt-know-help:active + .didnt-know-tooltip,
+.didnt-know-help:focus + .didnt-know-tooltip {
+  display: block;
 }
 </style>
