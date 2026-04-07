@@ -28,6 +28,10 @@
       <span class="expl">{{ $t("hotkeys.add_to_starred") }}</span>
     </li>
     <li>
+      <kbd>Alt</kbd>+<kbd>F</kbd>
+      <span class="expl">{{ $t("hotkeys.didnt_know") }}</span>
+    </li>
+    <li>
       <kbd>←</kbd> / <kbd>→</kbd> / <kbd>Home</kbd> / <kbd>End</kbd>
       <span class="expl">{{ $t("hotkeys.navigate") }}</span>
     </li>

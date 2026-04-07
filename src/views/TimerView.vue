@@ -20,8 +20,6 @@ const router = useRouter();
 const sessionStore = useSessionStore()
 const settings = useSettingsStore()
 const timerNotRunning = computed(() => sessionStore.timerState === TimerState.NOT_RUNNING)
-const didntKnowConfirmed = ref(false)
-
 const showDidntKnow = computed(() =>
     timerNotRunning.value
     && sessionStore.stats().length > 0
@@ -33,11 +31,17 @@ const currentResultKey = computed(() => {
     return sessionStore.observingResult < s.length ? s[sessionStore.observingResult].key : null
 })
 
+const isDidntKnowActive = computed(() =>
+    currentResultKey.value && currentResultKey.value in sessionStore.didntKnowMap
+)
+
 const onDidntKnowClick = () => {
     if (currentResultKey.value) {
-        sessionStore.flagDidntKnow(currentResultKey.value)
-        didntKnowConfirmed.value = true
-        setTimeout(() => { didntKnowConfirmed.value = false }, 1000)
+        if (isDidntKnowActive.value) {
+            sessionStore.unflagDidntKnow(currentResultKey.value)
+        } else {
+            sessionStore.flagDidntKnow(currentResultKey.value)
+        }
     }
 }
 const timerWrapClass = computed(() => timerNotRunning.value
@@ -190,21 +194,23 @@ const onPageTouchEnd = event => {
         >
           <div v-if="showDidntKnow" class="didnt-know-wrap">
             <button
-                class="btn btn-sm"
-                :class="didntKnowConfirmed ? 'btn-success' : 'btn-outline-secondary'"
+                class="btn btn-sm btn-outline-danger"
+                :class="{ active: isDidntKnowActive }"
                 tabindex="-1"
                 @click.stop="onDidntKnowClick"
                 @mousedown.stop=""
-                @touchstart.stop="onDidntKnowClick"
+                @touchstart.stop.prevent="onDidntKnowClick"
                 @keydown.space.prevent="">
-              <template v-if="didntKnowConfirmed"><i class="bi bi-check-lg"></i></template>
-              <template v-else>{{ $t("timer.didnt_know") }}</template>
+              <i class="bi" :class="isDidntKnowActive ? 'bi-check-square' : 'bi-square'"></i>
+              {{ $t("timer.didnt_know") }}
             </button>
-            <i class="bi bi-question-circle ms-1 text-muted didnt-know-help"
-               :title="$t('timer.didnt_know_tooltip')"
-               @click.stop=""
-               @mousedown.stop=""
-               @touchstart.stop=""></i>
+            <span class="didnt-know-help-wrap">
+              <i class="bi bi-question-circle ms-1 text-muted didnt-know-help"
+                 @click.stop=""
+                 @mousedown.stop=""
+                 @touchstart.stop.prevent=""></i>
+              <span class="didnt-know-tooltip">{{ $t('timer.didnt_know_tooltip') }}</span>
+            </span>
           </div>
           <Timer/>
         </div>
@@ -267,8 +273,33 @@ const onPageTouchEnd = event => {
   left: 8px;
   z-index: 1;
 }
+.didnt-know-help-wrap {
+  position: relative;
+  display: inline-block;
+}
 .didnt-know-help {
   cursor: pointer;
   font-size: 0.85rem;
+}
+.didnt-know-tooltip {
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  margin-top: 4px;
+  padding: 4px 8px;
+  background: var(--bs-dark, #333);
+  color: var(--bs-light, #fff);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 2;
+  pointer-events: none;
+}
+.didnt-know-help:hover + .didnt-know-tooltip,
+.didnt-know-help:active + .didnt-know-tooltip,
+.didnt-know-help:focus + .didnt-know-tooltip {
+  display: block;
 }
 </style>

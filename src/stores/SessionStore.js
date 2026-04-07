@@ -187,19 +187,30 @@ export const useSessionStore = defineStore('session', () => {
         setRandomCase()
     }
 
+    const didntKnowMap = reactive({}) // key -> original EMA, for undo
+
     const flagDidntKnow = (key) => {
         const emas = store.keys.map(k => srsData[k]?.a).filter(a => a != null)
         const med = median(emas)
         if (!srsData[key]) srsData[key] = { a: null, n: 0, s: 0 }
+        didntKnowMap[key] = srsData[key].a
         srsData[key].a = med * 5
         localStorage.setItem(srsKey, JSON.stringify(srsData))
+    }
+
+    const unflagDidntKnow = (key) => {
+        if (key in didntKnowMap) {
+            if (srsData[key]) srsData[key].a = didntKnowMap[key]
+            delete didntKnowMap[key]
+            localStorage.setItem(srsKey, JSON.stringify(srsData))
+        }
     }
 
     // may be undefined
     const currentScramble = computed(() => store.currentScramble)
 
-    return { store, srsData, clearSession, setSelectedKeys, stats, deleteResult,
+    return { store, srsData, didntKnowMap, clearSession, setSelectedKeys, stats, deleteResult,
         observingResult, timerStarted, timerState, getTimerReady, startTimer, stopTimer,
-        startRecap, currentScramble, casesWithZeroCount, flagDidntKnow
+        startRecap, currentScramble, casesWithZeroCount, flagDidntKnow, unflagDidntKnow
     }
 });
