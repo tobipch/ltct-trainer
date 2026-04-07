@@ -43,6 +43,7 @@ export const useSessionStore = defineStore('session', () => {
     const srsData = reactive(JSON.parse(localStorage.getItem(srsKey)) || {})
     const srsCounter = ref(parseInt(localStorage.getItem(srsCounterKey)) || 0)
     const recentCases = ref([])
+    const sessionStartedAt = ref(0)
 
     const timerState = ref(TimerState.NOT_RUNNING)
 
@@ -135,6 +136,7 @@ export const useSessionStore = defineStore('session', () => {
     const clearSession = () => {
         store.stats = [];
         observingResult.value = 0
+        sessionStartedAt.value = 0
     }
 
     // when the competitor places his hands on the timer (aka holds spacebar)
@@ -161,6 +163,7 @@ export const useSessionStore = defineStore('session', () => {
 
     const stopTimer = () => {
         const index = store.stats.length
+        if (!sessionStartedAt.value) sessionStartedAt.value = Date.now()
         if (store.currentKey !== null) {
             const key = store.currentKey
             const ms = Date.now() - timerStarted.value
@@ -221,7 +224,7 @@ export const useSessionStore = defineStore('session', () => {
     // may be undefined
     const currentScramble = computed(() => store.currentScramble)
 
-    return { store, srsData, didntKnowMap, clearSession, setSelectedKeys, stats, deleteResult,
+    return { store, srsData, didntKnowMap, sessionStartedAt, clearSession, setSelectedKeys, stats, deleteResult,
         observingResult, timerStarted, timerState, getTimerReady, startTimer, stopTimer,
         startRecap, currentScramble, casesWithZeroCount, flagDidntKnow, unflagDidntKnow
     }

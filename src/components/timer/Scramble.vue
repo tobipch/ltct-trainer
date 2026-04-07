@@ -9,7 +9,6 @@ const { t } = useI18n()
 const session = useSessionStore()
 const settings = useSettingsStore()
 const scramble = computed(() => session.currentScramble ?? t("timer.no_scramble"))
-const appendix = computed(() => settings.store.scrambleAppendix === "None" ? "" : " " + settings.store.scrambleAppendix)
 
 </script>
 
@@ -18,7 +17,6 @@ const appendix = computed(() => settings.store.scrambleAppendix === "None" ? "" 
     <span class="opacity-50 d-none d-sm-inline-block">{{$t("timer.scramble") + '&nbsp;'}} </span>
     <span :style="{ fontSize: settings.store.scrambleFontSize + 'px' }">
       {{ scramble }}
-      <span class="opacity-75">{{appendix}}</span>
     </span>
   </h3>
 </template>

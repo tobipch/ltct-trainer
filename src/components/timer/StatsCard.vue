@@ -26,7 +26,7 @@ onMounted(() => {
 
 const statClicked = i => sessionStore.observingResult = i
 
-const isOpen = ref(true)
+const isOpen = ref(false)
 </script>
 
 <template>
