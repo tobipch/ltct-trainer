@@ -2,6 +2,7 @@
 import Scramble from "@/components/timer/Scramble.vue";
 import Timer from "@/components/timer/Timer.vue";
 import ResultCard from "@/components/timer/ResultCard.vue";
+import SummaryCard from "@/components/timer/SummaryCard.vue";
 import StatsCard from "@/components/timer/StatsCard.vue";
 import {useI18n} from 'vue-i18n'
 
@@ -218,13 +219,19 @@ const onPageTouchEnd = event => {
           <Settings/>
         </div>
         <div v-if="displayStore.showStatistics" class="d-sm-none d-block">
-          <StatsCard/>
+          <SummaryCard v-if="sessionStore.stats().length > 0"/>
+          <div class="mt-2">
+            <StatsCard/>
+          </div>
         </div>
       </div>
 
       <div :class="rightColumnClass">
         <div class="my-2">
           <ResultCard v-if="sessionStore.stats().length > sessionStore.observingResult"/>
+        </div>
+        <div class="my-2" v-if="sessionStore.stats().length > 0">
+          <SummaryCard/>
         </div>
         <div class="my-2 d-sm-block d-none">
           <StatsCard/>

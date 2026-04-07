@@ -75,12 +75,24 @@
       "didnt_know_tooltip": "Diesen Fall vorübergehend priorisieren, damit er früher wiederholt wird"
     },
     "stats_card": {
-      "stats_title": "Statistiken:",
+      "stats_title": "Verlauf:",
       "n_solves": "keine Lösungen | eine Lösung | {count} Lösungen",
       "clear_btn": "löschen",
       "clear_btn_hint": "Sitzung löschen",
       "hold_spacebar_hint": "Halte die Leertaste gedrückt, um den Timer zu starten",
       "are_you_sure_to_clean": "Sitzung löschen?"
+    },
+    "summary": {
+      "title": "Zusammenfassung",
+      "solves": "Solves",
+      "cases_covered": "Fälle abgedeckt",
+      "total_time": "Gesamtzeit",
+      "median": "Median",
+      "mean": "Mittelwert",
+      "best": "Beste",
+      "worst": "Schlechteste",
+      "slowest_cases": "Langsamste Fälle",
+      "practice_slow": "Langsame Fälle üben"
     },
     "result_card": {
       "result_no": "Ergebnis Nr. {count}",

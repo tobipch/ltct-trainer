@@ -76,12 +76,24 @@
       "didnt_know_tooltip": "Prioritize this case temporarily so it repeats sooner"
     },
     "stats_card": {
-      "stats_title": "Stats:",
+      "stats_title": "History:",
       "n_solves": "no solves | one solve | {count} solves",
       "clear_btn": "clear",
       "clear_btn_hint": "Clear session",
       "hold_spacebar_hint": "Hold spacebar to start the timer",
       "are_you_sure_to_clean": "Clear session?"
+    },
+    "summary": {
+      "title": "Summary",
+      "solves": "Solves",
+      "cases_covered": "Cases covered",
+      "total_time": "Total time",
+      "median": "Median",
+      "mean": "Mean",
+      "best": "Best",
+      "worst": "Worst",
+      "slowest_cases": "Slowest cases",
+      "practice_slow": "Practice slow cases"
     },
     "result_card": {
       "result_no": "Result #{count}",
