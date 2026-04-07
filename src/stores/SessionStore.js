@@ -42,6 +42,7 @@ export const useSessionStore = defineStore('session', () => {
     const store = reactive(initialStore)
     const srsData = reactive(JSON.parse(localStorage.getItem(srsKey)) || {})
     const srsCounter = ref(parseInt(localStorage.getItem(srsCounterKey)) || 0)
+    const recentCases = ref([])
 
     const timerState = ref(TimerState.NOT_RUNNING)
 
@@ -87,13 +88,18 @@ export const useSessionStore = defineStore('session', () => {
             }
             store.currentKey = random_element(casesWithZeroCount.value)
         } else {
+            const cooldown = Math.min(3, Math.floor(store.keys.length / 2))
+            const recentSet = new Set(recentCases.value.slice(-cooldown))
+            const pool = store.keys.filter(k => !recentSet.has(k))
+            const candidates = pool.length > 0 ? pool : store.keys
+
             const settingsStore = useSettingsStore()
             if (settingsStore.store.smartSelection) {
-                const emas = store.keys
+                const emas = candidates
                     .map(k => srsData[k]?.a)
                     .filter(a => a != null)
                 const med = median(emas)
-                const entries = store.keys.map(key => ({
+                const entries = candidates.map(key => ({
                     key,
                     weight: caseWeight(
                         srsData[key] || { a: null, n: 0, s: 0 },
@@ -105,13 +111,15 @@ export const useSessionStore = defineStore('session', () => {
             } else {
                 if (Math.random() < 0.2) {
                     const minCount = Math.min(...Object.values(store.keysCount))
-                    const leastCountedKeys = Object.keys(store.keysCount).filter(key => store.keysCount[key] === minCount)
-                    store.currentKey = random_element(leastCountedKeys)
+                    const leastCountedKeys = Object.keys(store.keysCount).filter(key => store.keysCount[key] === minCount && !recentSet.has(key))
+                    store.currentKey = random_element(leastCountedKeys.length > 0 ? leastCountedKeys : Object.keys(store.keysCount).filter(key => store.keysCount[key] === minCount))
                 } else {
-                    store.currentKey = random_element(store.keys)
+                    store.currentKey = random_element(candidates)
                 }
             }
         }
+        recentCases.value.push(store.currentKey)
+        if (recentCases.value.length > 3) recentCases.value.shift()
         store.currentScramble = makeScramble(store.currentKey)
     }
 
@@ -119,6 +127,7 @@ export const useSessionStore = defineStore('session', () => {
         timerState.value = TimerState.NOT_RUNNING
         store.recapMode = false
         store.keys = keys
+        recentCases.value = []
         resetKeysCount() // TODO maybe don't reset every time
         setRandomCase()
     }
@@ -162,6 +171,9 @@ export const useSessionStore = defineStore('session', () => {
                 "ms": ms
             })
             store.keysCount[key]++;
+
+            // Clear "Didn't know" flag so it can be re-applied next time
+            delete didntKnowMap[key]
 
             // Update SRS data
             srsCounter.value++
