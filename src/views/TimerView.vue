@@ -11,11 +11,12 @@ const {t} = useI18n()
 import {TimerState, useSessionStore} from "@/stores/SessionStore";
 import {useRouter} from "vue-router";
 import Settings from "@/components/Settings.vue";
-import {computed, onMounted, onUnmounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref, watch} from "vue";
 import {useSelectedStore} from "@/stores/SelectedStore";
 import {useSettingsStore} from "@/stores/SettingsStore"
 import {usePresetsStore, starredName} from "@/stores/PresetStore";
 import {useDisplayStore} from "@/stores/DisplayStore";
+import {useBluetoothCubeStore} from "@/stores/BluetoothCubeStore";
 
 const router = useRouter();
 const sessionStore = useSessionStore()
@@ -53,6 +54,25 @@ const rightColumnClass = computed(() => timerNotRunning.value ? "result_col" : "
 const selectStore = useSelectedStore()
 const presets = usePresetsStore()
 const displayStore = useDisplayStore()
+const btStore = useBluetoothCubeStore()
+
+// Bluetooth cube auto start/stop
+watch(() => btStore.phase, (phase, oldPhase) => {
+  if (oldPhase === 'scrambling' && phase === 'solving') {
+    sessionStore.startTimer()
+  }
+  if (oldPhase === 'solving' && phase === 'idle') {
+    sessionStore.stopTimer()
+    sessionStore.timerState = TimerState.NOT_RUNNING
+  }
+})
+
+// Start tracking when a new scramble appears and BT cube is connected
+watch(() => sessionStore.currentScramble, (scramble) => {
+  if (btStore.connected && scramble) {
+    btStore.startTracking(scramble)
+  }
+})
 
 // global key events listener
 const onGlobalKeyDown = event => {

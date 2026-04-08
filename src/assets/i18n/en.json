@@ -8,7 +8,9 @@
       "language": "Language",
       "add_translation": "Add translation",
       "settings": "Settings",
-      "toggle_night_mode": "Toggle night mode"
+      "toggle_night_mode": "Toggle night mode",
+      "bluetooth_connect": "Connect smart cube",
+      "bluetooth_disconnect": "Disconnect smart cube"
     },
     "select": {
       "select_intro": "Select cases to practise",

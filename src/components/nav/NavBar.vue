@@ -6,9 +6,20 @@ import {useDisplayStore} from "@/stores/DisplayStore";
 import {useRouter, useRoute} from "vue-router";
 import {computed} from "vue";
 import {useSessionStore} from "@/stores/SessionStore";
+import {useBluetoothCubeStore} from "@/stores/BluetoothCubeStore";
+import {useI18n} from 'vue-i18n'
 
+const {t} = useI18n()
 const selected = useSelectedStore();
 const session = useSessionStore()
+const bt = useBluetoothCubeStore()
+
+const toggleBluetooth = () => bt.connected ? bt.disconnect() : bt.connect()
+const btBtnClass = computed(() => bt.connected ? 'btn-info' : 'btn-outline-secondary')
+const btTooltip = computed(() => bt.connected
+    ? t('nav.bluetooth_disconnect') + (bt.deviceName ? ` (${bt.deviceName})` : '')
+    : t('nav.bluetooth_connect')
+)
 const router = useRouter();
 const route = useRoute()
 const displayStore = useDisplayStore()
@@ -56,6 +67,28 @@ const tinySelectBtnText = computed(() => {
       </div>
       <div class="d-flex align-items-center justify-content-end p-0 gap-1">
         <LangDropdown/>
+        <button
+            class="btn"
+            tabindex="-1" @keydown.space.prevent=""
+            :class="btBtnClass"
+            @click="toggleBluetooth"
+            :title="btTooltip">
+          <i class="bi-bluetooth"/>
+        </button>
+        <span v-if="bt.connected && bt.battery !== null" class="bt-battery d-flex align-items-center" :title="bt.battery + '%'">
+          <svg width="20" height="10" viewBox="0 0 20 10">
+            <rect x="0" y="0" width="17" height="10" rx="1.5" fill="none"
+                  :stroke="bt.battery <= 20 ? 'var(--bs-danger)' : 'currentColor'" stroke-width="1.2"/>
+            <rect x="17" y="3" width="2.5" height="4" rx="0.5"
+                  :fill="bt.battery <= 20 ? 'var(--bs-danger)' : 'currentColor'"/>
+            <rect v-if="bt.battery > 5" x="1.5" y="1.5" width="4" height="7" rx="0.5"
+                  :fill="bt.battery <= 20 ? 'var(--bs-danger)' : 'var(--bs-success)'"/>
+            <rect v-if="bt.battery > 33" x="6.5" y="1.5" width="4" height="7" rx="0.5"
+                  :fill="'var(--bs-success)'"/>
+            <rect v-if="bt.battery > 66" x="11.5" y="1.5" width="4" height="7" rx="0.5"
+                  :fill="'var(--bs-success)'"/>
+          </svg>
+        </span>
         <button
             class="btn"
             tabindex="-1" @keydown.space.prevent=""

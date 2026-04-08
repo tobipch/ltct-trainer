@@ -15,20 +15,13 @@ export const makeScramble = (zbllKey) => {
   return random_element(scrambles);
 }
 
+export const invertMove = (m) => {
+  if (!m || m.length === 0) return ""
+  if (m[m.length - 1] === '2') return m
+  if (m[m.length - 1] === '\'') return m.slice(0, -1)
+  return `${m}'`
+}
+
 export const inverseScramble = s => {
-  const arr = s.split(" ");
-
-  return arr.map((it) => {
-    if (it.length === 0) {
-      return "";
-    }
-
-    if (it[it.length - 1] === '2') {
-      return it;
-    } else if (it[it.length - 1] === '\'') {
-      return it.slice(0, -1);
-    } else {
-      return `${it}'`;
-    }
-  }).reverse().join(" ");
+  return s.split(" ").map(invertMove).reverse().join(" ");
 };

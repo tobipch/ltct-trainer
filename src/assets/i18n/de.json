@@ -8,7 +8,9 @@
       "language": "Sprache",
       "add_translation": "Übersetzung hinzufügen",
       "settings": "Einstellungen",
-      "toggle_night_mode": "Nachtmodus umschalten"
+      "toggle_night_mode": "Nachtmodus umschalten",
+      "bluetooth_connect": "Smart Cube verbinden",
+      "bluetooth_disconnect": "Smart Cube trennen"
     },
     "select": {
       "select_intro": "Wähle Fälle zum Üben aus",
