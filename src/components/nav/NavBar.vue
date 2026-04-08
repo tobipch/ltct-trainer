@@ -75,7 +75,8 @@ const tinySelectBtnText = computed(() => {
             :title="btTooltip">
           <i class="bi-bluetooth"/>
         </button>
-        <span v-if="bt.connected && bt.battery !== null" class="bt-battery d-flex align-items-center" :title="bt.battery + '%'">
+        <span v-if="bt.connected && bt.battery !== null" class="bt-battery-wrap d-flex align-items-center"
+              tabindex="0" @touchstart.prevent="">
           <svg width="20" height="10" viewBox="0 0 20 10">
             <rect x="0" y="0" width="17" height="10" rx="1.5" fill="none"
                   :stroke="bt.battery <= 20 ? 'var(--bs-danger)' : 'currentColor'" stroke-width="1.2"/>
@@ -88,6 +89,7 @@ const tinySelectBtnText = computed(() => {
             <rect v-if="bt.battery > 66" x="11.5" y="1.5" width="4" height="7" rx="0.5"
                   :fill="'var(--bs-success)'"/>
           </svg>
+          <span class="bt-battery-tooltip">{{ bt.battery }}%</span>
         </span>
         <button
             class="btn"
@@ -113,5 +115,29 @@ const tinySelectBtnText = computed(() => {
   margin: 0 auto;
   padding-left: var(--app-gutter);
   padding-right: var(--app-gutter);
+}
+.bt-battery-wrap {
+  position: relative;
+  cursor: pointer;
+}
+.bt-battery-tooltip {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 8px;
+  background: var(--bs-dark, #333);
+  color: var(--bs-light, #fff);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  z-index: 1070;
+  pointer-events: none;
+}
+.bt-battery-wrap:hover .bt-battery-tooltip,
+.bt-battery-wrap:active .bt-battery-tooltip,
+.bt-battery-wrap:focus .bt-battery-tooltip {
+  display: block;
 }
 </style>

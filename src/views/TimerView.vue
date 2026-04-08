@@ -74,6 +74,13 @@ watch(() => sessionStore.currentScramble, (scramble) => {
   }
 })
 
+// Also start tracking when BT cube connects while a scramble is already shown
+watch(() => btStore.connected, (isConnected) => {
+  if (isConnected && sessionStore.currentScramble) {
+    btStore.startTracking(sessionStore.currentScramble)
+  }
+})
+
 // global key events listener
 const onGlobalKeyDown = event => {
   const confirmClearSession = () => {

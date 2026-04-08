@@ -1,6 +1,7 @@
 import {defineStore} from 'pinia'
-import {ref, shallowRef} from 'vue'
+import {ref} from 'vue'
 import {invertMove} from '@/helpers/scramble_utils'
+import {useDisplayStore} from '@/stores/DisplayStore'
 
 let kpuzzlePromise = null
 async function getKPuzzle() {
@@ -29,7 +30,12 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
     let solvedPattern = null
 
     const connect = async () => {
+        const display = useDisplayStore()
         try {
+            if (!navigator.bluetooth) {
+                display.showToast('Bluetooth is not supported in this browser', 'danger')
+                return
+            }
             const {connectSmartCube} = await import('btcube-web')
             cube = await connectSmartCube()
             connected.value = true
@@ -50,22 +56,33 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
             // Handle disconnect
             cube.device?.addEventListener('gattserverdisconnected', () => {
                 cleanupConnection()
+                display.showToast('Smart cube disconnected', 'info')
             })
+
+            display.showToast('Connected to ' + deviceName.value, 'success')
         } catch (e) {
             console.error('Bluetooth connect failed:', e)
             cleanupConnection()
+            if (e?.name === 'NotFoundError') {
+                display.showToast('No smart cube found. Make sure your cube is on and nearby.', 'danger')
+            } else {
+                display.showToast('Failed to connect: ' + (e?.message || 'Unknown error'), 'danger')
+            }
         }
     }
 
     const disconnect = () => {
+        const display = useDisplayStore()
         if (keyboardListener) {
             disconnectKeyboard()
+            display.showToast('Keyboard simulator disconnected', 'info')
             return
         }
         if (cube) {
             try { cube.commands.disconnect() } catch (_) {}
         }
         cleanupConnection()
+        display.showToast('Smart cube disconnected', 'info')
     }
 
     const cleanupConnection = () => {
