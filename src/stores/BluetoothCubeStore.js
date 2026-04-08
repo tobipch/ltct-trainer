@@ -58,6 +58,10 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
     }
 
     const disconnect = () => {
+        if (keyboardListener) {
+            disconnectKeyboard()
+            return
+        }
         if (cube) {
             try { cube.commands.disconnect() } catch (_) {}
         }
@@ -127,6 +131,62 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
                     console.warn('Move apply error:', e)
                 }
             }
+        }
+    }
+
+    // Keyboard simulator for testing without a real cube
+    let keyboardListener = null
+
+    const connectKeyboard = () => {
+        if (keyboardListener) return
+        connected.value = true
+        deviceName.value = 'Keyboard Simulator'
+        battery.value = 100
+
+        const keyMap = {
+            'r': 'R', 'l': 'L', 'u': 'U', 'd': 'D', 'f': 'F', 'b': 'B',
+            'R': "R'", 'L': "L'", 'U': "U'", 'D': "D'", 'F': "F'", 'B': "B'",
+        }
+        const doubleMap = {
+            '1': 'R2', '2': 'L2', '3': 'U2', '4': 'D2', '5': 'F2', '6': 'B2',
+        }
+
+        keyboardListener = (e) => {
+            const move = keyMap[e.key] || doubleMap[e.key]
+            if (move && (phase.value === 'scrambling' || phase.value === 'solving')) {
+                e.preventDefault()
+                e.stopPropagation()
+                onMove(move)
+            }
+        }
+        window.addEventListener('keydown', keyboardListener, true) // capture phase
+        console.log(
+            '%cKeyboard cube simulator active!',
+            'color: #0d6efd; font-weight: bold',
+            '\n  r/l/u/d/f/b = clockwise',
+            '\n  R/L/U/D/F/B (shift) = prime',
+            '\n  1-6 = R2/L2/U2/D2/F2/B2',
+            '\n  Disconnect: window.btSim.disconnect()'
+        )
+    }
+
+    const disconnectKeyboard = () => {
+        if (keyboardListener) {
+            window.removeEventListener('keydown', keyboardListener, true)
+            keyboardListener = null
+        }
+        connected.value = false
+        deviceName.value = null
+        battery.value = null
+        resetTracking()
+    }
+
+    // Expose simulator on window for console access
+    if (typeof window !== 'undefined') {
+        window.btSim = {
+            connect: connectKeyboard,
+            disconnect: disconnectKeyboard,
+            move: (m) => onMove(m),
         }
     }
 
