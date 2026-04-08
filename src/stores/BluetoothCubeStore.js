@@ -164,12 +164,15 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
             'r': 'R', 'l': 'L', 'u': 'U', 'd': 'D', 'f': 'F', 'b': 'B',
             'R': "R'", 'L': "L'", 'U': "U'", 'D': "D'", 'F': "F'", 'B': "B'",
         }
-        const doubleMap = {
-            '1': 'R2', '2': 'L2', '3': 'U2', '4': 'D2', '5': 'F2', '6': 'B2',
-        }
 
         keyboardListener = (e) => {
-            const move = keyMap[e.key] || doubleMap[e.key]
+            let move = null
+            const lower = e.key.toLowerCase()
+            if (e.ctrlKey && 'rludfb'.includes(lower)) {
+                move = lower.toUpperCase() + '2'
+            } else {
+                move = keyMap[e.key]
+            }
             if (move && (phase.value === 'scrambling' || phase.value === 'solving')) {
                 e.preventDefault()
                 e.stopPropagation()
@@ -182,7 +185,7 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
             'color: #0d6efd; font-weight: bold',
             '\n  r/l/u/d/f/b = clockwise',
             '\n  R/L/U/D/F/B (shift) = prime',
-            '\n  1-6 = R2/L2/U2/D2/F2/B2',
+            '\n  Ctrl+r/l/u/d/f/b = double (R2, L2, ...)',
             '\n  Disconnect: window.btSim.disconnect()'
         )
     }
@@ -198,18 +201,28 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
         resetTracking()
     }
 
-    // Expose simulator on window for console access
-    if (typeof window !== 'undefined') {
-        window.btSim = {
-            connect: connectKeyboard,
-            disconnect: disconnectKeyboard,
-            move: (m) => onMove(m),
-        }
-    }
+    // Expose internals for btSim (set up after store return)
+    const _getInternals = () => ({ connectKeyboard, disconnectKeyboard, onMove })
 
     return {
         connected, deviceName, battery,
         phase, scrambleMoves, position, correctionMoves,
-        connect, disconnect, startTracking, resetTracking
+        connect, disconnect, startTracking, resetTracking, _getInternals
     }
 })
+
+// Expose keyboard simulator on window at module load time (no store instantiation needed)
+if (typeof window !== 'undefined') {
+    Object.defineProperty(window, 'btSim', {
+        get() {
+            const store = useBluetoothCubeStore()
+            const { connectKeyboard, disconnectKeyboard, onMove } = store._getInternals()
+            return {
+                connect: connectKeyboard,
+                disconnect: disconnectKeyboard,
+                move: (m) => onMove(m),
+            }
+        },
+        configurable: true
+    })
+}
