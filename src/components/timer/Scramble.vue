@@ -4,7 +4,7 @@ import {useSessionStore} from "@/stores/SessionStore";
 import {useBluetoothCubeStore} from "@/stores/BluetoothCubeStore";
 import {computed} from "vue";
 import {useSettingsStore} from "@/stores/SettingsStore";
-import {moveFace, moveAmount} from "@/helpers/scramble_utils";
+import {moveFace, moveAmount, amountToMove} from "@/helpers/scramble_utils";
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
@@ -14,13 +14,6 @@ const bt = useBluetoothCubeStore()
 const scramble = computed(() => session.currentScramble ?? t("timer.no_scramble"))
 
 const isTracking = computed(() => bt.connected && bt.phase !== 'idle')
-function amountToMove(face, amount) {
-  const a = ((amount % 4) + 4) % 4
-  if (a === 0) return null
-  if (a === 1) return face
-  if (a === 2) return face + '2'
-  return face + "'"
-}
 
 // Simplify a list of {text, type} by merging adjacent same-face moves
 function simplifyMoves(items) {
@@ -64,7 +57,7 @@ const displayMoves = computed(() => {
   }
   for (let i = bt.position; i < bt.scrambleMoves.length; i++) {
     const type = i === bt.position
-        ? (bt.pendingFaceTurn?.target === 'scramble' ? 'pending' : 'current')
+        ? (bt.pendingFaceTurn ? 'pending' : 'current')
         : 'remaining'
     pending.push({ text: bt.scrambleMoves[i], type })
   }

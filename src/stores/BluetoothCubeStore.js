@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {ref} from 'vue'
-import {invertMove, moveFace, moveAmount} from '@/helpers/scramble_utils'
+import {invertMove, moveFace, moveAmount, amountToMove} from '@/helpers/scramble_utils'
 import {useDisplayStore} from '@/stores/DisplayStore'
 
 let kpuzzlePromise = null
@@ -132,24 +132,17 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
 
     const onMove = (move) => {
         if (phase.value === 'scrambling') {
-            // Priority 1: Pending face turn (accumulating quarter turns)
+            // Priority 1: Pending face turn for scramble moves
             if (pendingFaceTurn.value) {
                 const pending = pendingFaceTurn.value
-                const isCorrection = pending.target === 'correction'
-                const expectedMove = isCorrection
-                    ? correctionMoves.value[correctionMoves.value.length - 1]
-                    : scrambleMoves.value[position.value]
+                const expected = scrambleMoves.value[position.value]
 
                 if (moveFace(move) === pending.face) {
                     const newAcc = (pending.accumulated + moveAmount(move)) % 4
-                    if (newAcc === moveAmount(expectedMove)) {
+                    if (newAcc === moveAmount(expected)) {
                         // Accumulated amount matches expected — done!
                         pendingFaceTurn.value = null
-                        if (isCorrection) {
-                            correctionMoves.value.pop()
-                        } else {
-                            advancePosition()
-                        }
+                        advancePosition()
                     } else if (newAcc === 0) {
                         // Cancelled out — reset as if nothing happened
                         pendingFaceTurn.value = null
@@ -173,26 +166,29 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
                 return
             }
 
-            // Priority 2: Corrections
+            // Priority 2: Corrections (immediate merge for same-face moves)
             if (correctionMoves.value.length > 0) {
-                const expected = correctionMoves.value[correctionMoves.value.length - 1]
-                if (move === expected) {
+                const last = correctionMoves.value[correctionMoves.value.length - 1]
+                if (move === last) {
+                    // Exact match — successful undo
                     correctionMoves.value.pop()
-                } else if (moveFace(move) === moveFace(expected)) {
-                    // Same face, wrong direction — start pending for correction
-                    pendingFaceTurn.value = {
-                        face: moveFace(move),
-                        accumulated: moveAmount(move),
-                        moves: [move],
-                        target: 'correction'
+                } else if (moveFace(move) === moveFace(last)) {
+                    // Same face — merge inverse of new move with last correction
+                    const merged = (moveAmount(last) + moveAmount(invertMove(move))) % 4
+                    if (merged === 0) {
+                        correctionMoves.value.pop()
+                    } else {
+                        correctionMoves.value[correctionMoves.value.length - 1] =
+                            amountToMove(moveFace(last), merged)
                     }
                 } else {
+                    // Different face — push new correction
                     correctionMoves.value.push(invertMove(move))
                 }
                 return
             }
 
-            // Priority 3: Normal matching
+            // Priority 3: Normal scramble matching
             if (position.value < scrambleMoves.value.length) {
                 const expected = scrambleMoves.value[position.value]
                 if (move === expected) {
@@ -202,8 +198,7 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
                     pendingFaceTurn.value = {
                         face: moveFace(move),
                         accumulated: moveAmount(move),
-                        moves: [move],
-                        target: 'scramble'
+                        moves: [move]
                     }
                 } else {
                     correctionMoves.value.push(invertMove(move))

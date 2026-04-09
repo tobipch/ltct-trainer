@@ -33,3 +33,11 @@ export const moveAmount = (m) => {
   if (m.endsWith("2")) return 2
   return 1
 }
+
+export const amountToMove = (face, amount) => {
+  const a = ((amount % 4) + 4) % 4
+  if (a === 0) return null
+  if (a === 1) return face
+  if (a === 2) return face + '2'
+  return face + "'"
+}
