@@ -22,13 +22,16 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
     const position = ref(0)
     const correctionMoves = ref([])
 
+    // Pending face turn: reactive so Scramble.vue can show orange state
+    // { face: string, accumulated: number (quarter turns mod 4), moves: string[] }
+    const pendingFaceTurn = ref(null)
+
     // Internal (not exposed)
     let cube = null
     let moveSubscription = null
     let infoSubscription = null
     let cubePattern = null
     let solvedPattern = null
-    let pendingHalfTurn = null // { face, firstMove, timeout }
 
     const connect = async () => {
         const display = useDisplayStore()
@@ -101,6 +104,7 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
         scrambleMoves.value = scrambleString.split(' ').filter(m => m.length > 0)
         position.value = 0
         correctionMoves.value = []
+        pendingFaceTurn.value = null
         phase.value = 'scrambling'
 
         // Prepare solved pattern for later solved detection
@@ -109,19 +113,12 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
         cubePattern = solvedPattern.applyAlg(scrambleString)
     }
 
-    const clearPendingHalfTurn = () => {
-        if (pendingHalfTurn) {
-            clearTimeout(pendingHalfTurn.timeout)
-            pendingHalfTurn = null
-        }
-    }
-
     const resetTracking = () => {
         phase.value = 'idle'
         scrambleMoves.value = []
         position.value = 0
         correctionMoves.value = []
-        clearPendingHalfTurn()
+        pendingFaceTurn.value = null
         cubePattern = null
         solvedPattern = null
     }
@@ -146,27 +143,35 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
                 return
             }
 
-            // Priority 2: Pending half turn (waiting for second quarter of a double move)
-            if (pendingHalfTurn) {
-                clearTimeout(pendingHalfTurn.timeout)
-                const pending = pendingHalfTurn
-                pendingHalfTurn = null
-                const expected = scrambleMoves.value[position.value] // the "X2" move
-
+            // Priority 2: Pending face turn (accumulating quarter turns on correct face)
+            if (pendingFaceTurn.value) {
+                const pending = pendingFaceTurn.value
                 if (moveFace(move) === pending.face) {
-                    const total = (moveAmount(pending.firstMove) + moveAmount(move)) % 4
-                    if (total === moveAmount(expected)) {
-                        // Completed the double move (L+L=L2 or L'+L'=L2)
+                    const newAcc = (pending.accumulated + moveAmount(move)) % 4
+                    const expected = scrambleMoves.value[position.value]
+                    if (newAcc === moveAmount(expected)) {
+                        // Accumulated amount matches expected — done!
+                        pendingFaceTurn.value = null
                         advancePosition()
+                    } else if (newAcc === 0) {
+                        // Cancelled out — reset to current (as if nothing happened)
+                        pendingFaceTurn.value = null
                     } else {
-                        // Same face but wrong total (e.g. L+L' cancels)
-                        correctionMoves.value.push(invertMove(pending.firstMove))
-                        correctionMoves.value.push(invertMove(move))
+                        // Still accumulating
+                        pendingFaceTurn.value = {
+                            face: pending.face,
+                            accumulated: newAcc,
+                            moves: [...pending.moves, move]
+                        }
                     }
                 } else {
-                    // Different face — first move was wrong, re-process second move
-                    correctionMoves.value.push(invertMove(pending.firstMove))
-                    onMove(move)
+                    // Different face — all pending moves become corrections
+                    const pendingMoves = pending.moves
+                    pendingFaceTurn.value = null
+                    for (const m of pendingMoves) {
+                        correctionMoves.value.push(invertMove(m))
+                    }
+                    onMove(move) // re-process new move
                 }
                 return
             }
@@ -176,16 +181,12 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
                 const expected = scrambleMoves.value[position.value]
                 if (move === expected) {
                     advancePosition()
-                } else if (expected.endsWith('2') && moveFace(move) === moveFace(expected)) {
-                    // First quarter of a potential double move
-                    pendingHalfTurn = {
+                } else if (moveFace(move) === moveFace(expected)) {
+                    // Right face, wrong amount/direction — start pending
+                    pendingFaceTurn.value = {
                         face: moveFace(move),
-                        firstMove: move,
-                        timeout: setTimeout(() => {
-                            // Timed out — treat single move as wrong
-                            pendingHalfTurn = null
-                            correctionMoves.value.push(invertMove(move))
-                        }, 500)
+                        accumulated: moveAmount(move),
+                        moves: [move]
                     }
                 } else {
                     correctionMoves.value.push(invertMove(move))
@@ -261,7 +262,7 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
 
     return {
         connected, deviceName, battery,
-        phase, scrambleMoves, position, correctionMoves,
+        phase, scrambleMoves, position, correctionMoves, pendingFaceTurn,
         connect, disconnect, startTracking, resetTracking, _getInternals
     }
 })

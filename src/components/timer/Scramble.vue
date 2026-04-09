@@ -63,7 +63,10 @@ const displayMoves = computed(() => {
     pending.push({ text: cm, type: 'correction' })
   }
   for (let i = bt.position; i < bt.scrambleMoves.length; i++) {
-    pending.push({ text: bt.scrambleMoves[i], type: i === bt.position ? 'current' : 'remaining' })
+    const type = i === bt.position
+        ? (bt.pendingFaceTurn ? 'pending' : 'current')
+        : 'remaining'
+    pending.push({ text: bt.scrambleMoves[i], type })
   }
 
   const simplified = simplifyMoves(pending)
@@ -83,6 +86,7 @@ const displayMoves = computed(() => {
               :class="{
                 'text-success': m.type === 'done',
                 'text-danger fw-bold': m.type === 'correction',
+                'text-warning fw-bold': m.type === 'pending',
                 'fw-bold': m.type === 'current',
               }">{{ m.text }}</span>
       </template>
