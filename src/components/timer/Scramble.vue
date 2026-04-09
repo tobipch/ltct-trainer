@@ -28,7 +28,7 @@ function simplifyMoves(items) {
   for (const item of items) {
     if (result.length > 0) {
       const prev = result[result.length - 1]
-      if (moveFace(prev.text) === moveFace(item.text)) {
+      if (prev.type === item.type && moveFace(prev.text) === moveFace(item.text)) {
         const total = moveAmount(prev.text) + moveAmount(item.text)
         const merged = amountToMove(moveFace(prev.text), total)
         if (merged) {
