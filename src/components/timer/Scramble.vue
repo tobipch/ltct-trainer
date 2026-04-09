@@ -45,9 +45,12 @@ const displayMoves = computed(() => {
 
   const items = []
 
-  // Completed moves (green)
+  const isBackwardPending = bt.pendingFaceTurn?.direction === 'backward'
+
+  // Completed moves (green), but last one is orange if backward pending
   for (let i = 0; i < bt.position; i++) {
-    items.push({ text: bt.scrambleMoves[i], type: 'done' })
+    const type = (isBackwardPending && i === bt.position - 1) ? 'pending' : 'done'
+    items.push({ text: bt.scrambleMoves[i], type })
   }
 
   // Correction moves (red) + current scramble move + remaining — simplify these together
@@ -57,7 +60,7 @@ const displayMoves = computed(() => {
   }
   for (let i = bt.position; i < bt.scrambleMoves.length; i++) {
     const type = i === bt.position
-        ? (bt.pendingFaceTurn ? 'pending' : 'current')
+        ? (bt.pendingFaceTurn && !isBackwardPending ? 'pending' : 'current')
         : 'remaining'
     pending.push({ text: bt.scrambleMoves[i], type })
   }

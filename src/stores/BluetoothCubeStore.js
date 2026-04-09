@@ -155,16 +155,23 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
     }
 
     const processScrambleMove = (move) => {
-        // Priority 1: Pending face turn for scramble moves
+        // Priority 1: Pending face turn (forward or backward)
         if (pendingFaceTurn.value) {
             const pending = pendingFaceTurn.value
-            const expected = scrambleMoves.value[position.value]
+            const isBackward = pending.direction === 'backward'
+            const expected = isBackward
+                ? invertMove(scrambleMoves.value[position.value - 1])
+                : scrambleMoves.value[position.value]
 
             if (moveFace(move) === pending.face) {
                 const newAcc = (pending.accumulated + moveAmount(move)) % 4
                 if (newAcc === moveAmount(expected)) {
                     pendingFaceTurn.value = null
-                    advancePosition()
+                    if (isBackward) {
+                        position.value--
+                    } else {
+                        advancePosition()
+                    }
                 } else if (newAcc === 0) {
                     pendingFaceTurn.value = null
                 } else {
@@ -213,7 +220,8 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
                 pendingFaceTurn.value = {
                     face: moveFace(move),
                     accumulated: moveAmount(move),
-                    moves: [move]
+                    moves: [move],
+                    direction: 'forward'
                 }
             } else if (position.value + 1 < scrambleMoves.value.length) {
                 const nextMove = scrambleMoves.value[position.value + 1]
@@ -224,11 +232,34 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
                     processScrambleMove(move)
                     return
                 }
+                if (tryBackward(move)) return
                 correctionMoves.value.push(invertMove(move))
             } else {
+                if (tryBackward(move)) return
                 correctionMoves.value.push(invertMove(move))
             }
         }
+    }
+
+    // Check if move undoes the previous scramble move (go backward)
+    const tryBackward = (move) => {
+        if (position.value === 0) return false
+        const prevMove = scrambleMoves.value[position.value - 1]
+        const undoMove = invertMove(prevMove)
+        if (move === undoMove) {
+            position.value--
+            return true
+        }
+        if (moveFace(move) === moveFace(undoMove)) {
+            pendingFaceTurn.value = {
+                face: moveFace(move),
+                accumulated: moveAmount(move),
+                moves: [move],
+                direction: 'backward'
+            }
+            return true
+        }
+        return false
     }
 
     // Keyboard simulator for testing without a real cube
