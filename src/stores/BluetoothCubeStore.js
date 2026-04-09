@@ -3,6 +3,8 @@ import {ref} from 'vue'
 import {invertMove, moveFace, moveAmount, amountToMove} from '@/helpers/scramble_utils'
 import {useDisplayStore} from '@/stores/DisplayStore'
 
+const oppositeFace = {R: 'L', L: 'R', U: 'D', D: 'U', F: 'B', B: 'F'}
+
 let kpuzzlePromise = null
 async function getKPuzzle() {
     if (!kpuzzlePromise) {
@@ -200,6 +202,17 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
                         accumulated: moveAmount(move),
                         moves: [move]
                     }
+                } else if (position.value + 1 < scrambleMoves.value.length) {
+                    const nextMove = scrambleMoves.value[position.value + 1]
+                    if (oppositeFace[moveFace(expected)] === moveFace(nextMove)
+                        && moveFace(move) === moveFace(nextMove)) {
+                        // Opposite-face moves commute — swap and re-process
+                        scrambleMoves.value[position.value] = nextMove
+                        scrambleMoves.value[position.value + 1] = expected
+                        onMove(move)
+                        return
+                    }
+                    correctionMoves.value.push(invertMove(move))
                 } else {
                     correctionMoves.value.push(invertMove(move))
                 }
