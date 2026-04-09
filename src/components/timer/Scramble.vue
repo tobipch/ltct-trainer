@@ -64,7 +64,7 @@ const displayMoves = computed(() => {
   }
   for (let i = bt.position; i < bt.scrambleMoves.length; i++) {
     const type = i === bt.position
-        ? (bt.pendingFaceTurn ? 'pending' : 'current')
+        ? (bt.pendingFaceTurn?.target === 'scramble' ? 'pending' : 'current')
         : 'remaining'
     pending.push({ text: bt.scrambleMoves[i], type })
   }

@@ -132,34 +132,31 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
 
     const onMove = (move) => {
         if (phase.value === 'scrambling') {
-            // Priority 1: Corrections first
-            if (correctionMoves.value.length > 0) {
-                const expected = correctionMoves.value[correctionMoves.value.length - 1]
-                if (move === expected) {
-                    correctionMoves.value.pop()
-                } else {
-                    correctionMoves.value.push(invertMove(move))
-                }
-                return
-            }
-
-            // Priority 2: Pending face turn (accumulating quarter turns on correct face)
+            // Priority 1: Pending face turn (accumulating quarter turns)
             if (pendingFaceTurn.value) {
                 const pending = pendingFaceTurn.value
+                const isCorrection = pending.target === 'correction'
+                const expectedMove = isCorrection
+                    ? correctionMoves.value[correctionMoves.value.length - 1]
+                    : scrambleMoves.value[position.value]
+
                 if (moveFace(move) === pending.face) {
                     const newAcc = (pending.accumulated + moveAmount(move)) % 4
-                    const expected = scrambleMoves.value[position.value]
-                    if (newAcc === moveAmount(expected)) {
+                    if (newAcc === moveAmount(expectedMove)) {
                         // Accumulated amount matches expected — done!
                         pendingFaceTurn.value = null
-                        advancePosition()
+                        if (isCorrection) {
+                            correctionMoves.value.pop()
+                        } else {
+                            advancePosition()
+                        }
                     } else if (newAcc === 0) {
-                        // Cancelled out — reset to current (as if nothing happened)
+                        // Cancelled out — reset as if nothing happened
                         pendingFaceTurn.value = null
                     } else {
                         // Still accumulating
                         pendingFaceTurn.value = {
-                            face: pending.face,
+                            ...pending,
                             accumulated: newAcc,
                             moves: [...pending.moves, move]
                         }
@@ -176,6 +173,25 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
                 return
             }
 
+            // Priority 2: Corrections
+            if (correctionMoves.value.length > 0) {
+                const expected = correctionMoves.value[correctionMoves.value.length - 1]
+                if (move === expected) {
+                    correctionMoves.value.pop()
+                } else if (moveFace(move) === moveFace(expected)) {
+                    // Same face, wrong direction — start pending for correction
+                    pendingFaceTurn.value = {
+                        face: moveFace(move),
+                        accumulated: moveAmount(move),
+                        moves: [move],
+                        target: 'correction'
+                    }
+                } else {
+                    correctionMoves.value.push(invertMove(move))
+                }
+                return
+            }
+
             // Priority 3: Normal matching
             if (position.value < scrambleMoves.value.length) {
                 const expected = scrambleMoves.value[position.value]
@@ -186,7 +202,8 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
                     pendingFaceTurn.value = {
                         face: moveFace(move),
                         accumulated: moveAmount(move),
-                        moves: [move]
+                        moves: [move],
+                        target: 'scramble'
                     }
                 } else {
                     correctionMoves.value.push(invertMove(move))
