@@ -1,7 +1,8 @@
 import {defineStore} from 'pinia'
 import {ref} from 'vue'
-import {invertMove, moveFace, moveAmount, amountToMove} from '@/helpers/scramble_utils'
+import {invertMove, moveFace, moveAmount, amountToMove, buildMoveRemap} from '@/helpers/scramble_utils'
 import {useDisplayStore} from '@/stores/DisplayStore'
+import {useSettingsStore} from '@/stores/SettingsStore'
 
 const oppositeFace = {R: 'L', L: 'R', U: 'D', D: 'U', F: 'B', B: 'F'}
 
@@ -109,10 +110,11 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
         pendingFaceTurn.value = null
         phase.value = 'scrambling'
 
-        // Prepare solved pattern for later solved detection
+        // Track physical cube state from solved; solved detection triggers
+        // when the cube returns to solved after scrambling + solving
         const kpuzzle = await getKPuzzle()
         solvedPattern = kpuzzle.defaultPattern()
-        cubePattern = solvedPattern.applyAlg(scrambleString)
+        cubePattern = solvedPattern
     }
 
     const resetTracking = () => {
@@ -132,102 +134,99 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
         }
     }
 
-    const onMove = (move) => {
+    const onMove = (rawMove) => {
+        // Track physical cube state for solved detection (always in standard frame)
+        if (cubePattern) {
+            try { cubePattern = cubePattern.applyMove(rawMove) } catch (_) {}
+        }
+
+        // Remap move based on cube orientation setting
+        const settings = useSettingsStore()
+        const remap = buildMoveRemap(settings.store.cubeOrientation)
+        const move = remap ? remap(rawMove) : rawMove
+
         if (phase.value === 'scrambling') {
-            // Priority 1: Pending face turn for scramble moves
-            if (pendingFaceTurn.value) {
-                const pending = pendingFaceTurn.value
-                const expected = scrambleMoves.value[position.value]
-
-                if (moveFace(move) === pending.face) {
-                    const newAcc = (pending.accumulated + moveAmount(move)) % 4
-                    if (newAcc === moveAmount(expected)) {
-                        // Accumulated amount matches expected — done!
-                        pendingFaceTurn.value = null
-                        advancePosition()
-                    } else if (newAcc === 0) {
-                        // Cancelled out — reset as if nothing happened
-                        pendingFaceTurn.value = null
-                    } else {
-                        // Still accumulating
-                        pendingFaceTurn.value = {
-                            ...pending,
-                            accumulated: newAcc,
-                            moves: [...pending.moves, move]
-                        }
-                    }
-                } else {
-                    // Different face — all pending moves become corrections
-                    const pendingMoves = pending.moves
-                    pendingFaceTurn.value = null
-                    for (const m of pendingMoves) {
-                        correctionMoves.value.push(invertMove(m))
-                    }
-                    onMove(move) // re-process new move
-                }
-                return
-            }
-
-            // Priority 2: Corrections (immediate merge for same-face moves)
-            if (correctionMoves.value.length > 0) {
-                const last = correctionMoves.value[correctionMoves.value.length - 1]
-                if (move === last) {
-                    // Exact match — successful undo
-                    correctionMoves.value.pop()
-                } else if (moveFace(move) === moveFace(last)) {
-                    // Same face — merge inverse of new move with last correction
-                    const merged = (moveAmount(last) + moveAmount(invertMove(move))) % 4
-                    if (merged === 0) {
-                        correctionMoves.value.pop()
-                    } else {
-                        correctionMoves.value[correctionMoves.value.length - 1] =
-                            amountToMove(moveFace(last), merged)
-                    }
-                } else {
-                    // Different face — push new correction
-                    correctionMoves.value.push(invertMove(move))
-                }
-                return
-            }
-
-            // Priority 3: Normal scramble matching
-            if (position.value < scrambleMoves.value.length) {
-                const expected = scrambleMoves.value[position.value]
-                if (move === expected) {
-                    advancePosition()
-                } else if (moveFace(move) === moveFace(expected)) {
-                    // Right face, wrong amount/direction — start pending
-                    pendingFaceTurn.value = {
-                        face: moveFace(move),
-                        accumulated: moveAmount(move),
-                        moves: [move]
-                    }
-                } else if (position.value + 1 < scrambleMoves.value.length) {
-                    const nextMove = scrambleMoves.value[position.value + 1]
-                    if (oppositeFace[moveFace(expected)] === moveFace(nextMove)
-                        && moveFace(move) === moveFace(nextMove)) {
-                        // Opposite-face moves commute — swap and re-process
-                        scrambleMoves.value[position.value] = nextMove
-                        scrambleMoves.value[position.value + 1] = expected
-                        onMove(move)
-                        return
-                    }
-                    correctionMoves.value.push(invertMove(move))
-                } else {
-                    correctionMoves.value.push(invertMove(move))
-                }
-            }
+            processScrambleMove(move)
         } else if (phase.value === 'solving') {
-            // Apply move to track cube state
-            if (cubePattern && solvedPattern) {
-                try {
-                    cubePattern = cubePattern.applyMove(move)
-                    if (cubePattern.isIdentical(solvedPattern)) {
-                        phase.value = 'idle'
+            if (cubePattern && solvedPattern && cubePattern.isIdentical(solvedPattern)) {
+                phase.value = 'idle'
+            }
+        }
+    }
+
+    const processScrambleMove = (move) => {
+        // Priority 1: Pending face turn for scramble moves
+        if (pendingFaceTurn.value) {
+            const pending = pendingFaceTurn.value
+            const expected = scrambleMoves.value[position.value]
+
+            if (moveFace(move) === pending.face) {
+                const newAcc = (pending.accumulated + moveAmount(move)) % 4
+                if (newAcc === moveAmount(expected)) {
+                    pendingFaceTurn.value = null
+                    advancePosition()
+                } else if (newAcc === 0) {
+                    pendingFaceTurn.value = null
+                } else {
+                    pendingFaceTurn.value = {
+                        ...pending,
+                        accumulated: newAcc,
+                        moves: [...pending.moves, move]
                     }
-                } catch (e) {
-                    console.warn('Move apply error:', e)
                 }
+            } else {
+                const pendingMoves = pending.moves
+                pendingFaceTurn.value = null
+                for (const m of pendingMoves) {
+                    correctionMoves.value.push(invertMove(m))
+                }
+                processScrambleMove(move)
+            }
+            return
+        }
+
+        // Priority 2: Corrections (immediate merge for same-face moves)
+        if (correctionMoves.value.length > 0) {
+            const last = correctionMoves.value[correctionMoves.value.length - 1]
+            if (move === last) {
+                correctionMoves.value.pop()
+            } else if (moveFace(move) === moveFace(last)) {
+                const merged = (moveAmount(last) + moveAmount(invertMove(move))) % 4
+                if (merged === 0) {
+                    correctionMoves.value.pop()
+                } else {
+                    correctionMoves.value[correctionMoves.value.length - 1] =
+                        amountToMove(moveFace(last), merged)
+                }
+            } else {
+                correctionMoves.value.push(invertMove(move))
+            }
+            return
+        }
+
+        // Priority 3: Normal scramble matching
+        if (position.value < scrambleMoves.value.length) {
+            const expected = scrambleMoves.value[position.value]
+            if (move === expected) {
+                advancePosition()
+            } else if (moveFace(move) === moveFace(expected)) {
+                pendingFaceTurn.value = {
+                    face: moveFace(move),
+                    accumulated: moveAmount(move),
+                    moves: [move]
+                }
+            } else if (position.value + 1 < scrambleMoves.value.length) {
+                const nextMove = scrambleMoves.value[position.value + 1]
+                if (oppositeFace[moveFace(expected)] === moveFace(nextMove)
+                    && moveFace(move) === moveFace(nextMove)) {
+                    scrambleMoves.value[position.value] = nextMove
+                    scrambleMoves.value[position.value + 1] = expected
+                    processScrambleMove(move)
+                    return
+                }
+                correctionMoves.value.push(invertMove(move))
+            } else {
+                correctionMoves.value.push(invertMove(move))
             }
         }
     }
