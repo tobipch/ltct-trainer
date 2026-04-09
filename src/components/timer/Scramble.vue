@@ -59,8 +59,8 @@ const displayMoves = computed(() => {
 
   // Correction moves (red) + current scramble move + remaining — simplify these together
   const pending = []
-  for (const cm of bt.correctionMoves) {
-    pending.push({ text: cm, type: 'correction' })
+  for (let i = bt.correctionMoves.length - 1; i >= 0; i--) {
+    pending.push({ text: bt.correctionMoves[i], type: 'correction' })
   }
   for (let i = bt.position; i < bt.scrambleMoves.length; i++) {
     const type = i === bt.position
