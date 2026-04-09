@@ -162,6 +162,10 @@ onMounted(() => {
   document.addEventListener('touchend', onPageTouchEnd);
   sessionStore.timerState = TimerState.NOT_RUNNING
   sessionStore.observingResult = Math.max(sessionStore.stats().length - 1, 0)
+  // Start BT tracking if cube was already connected before navigating here
+  if (btStore.connected && sessionStore.currentScramble) {
+    btStore.startTracking(sessionStore.currentScramble)
+  }
 });
 
 onUnmounted(() => {

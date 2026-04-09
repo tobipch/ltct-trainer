@@ -25,3 +25,11 @@ export const invertMove = (m) => {
 export const inverseScramble = s => {
   return s.split(" ").map(invertMove).reverse().join(" ");
 };
+
+export const moveFace = (m) => m[0]
+
+export const moveAmount = (m) => {
+  if (m.endsWith("'")) return 3
+  if (m.endsWith("2")) return 2
+  return 1
+}

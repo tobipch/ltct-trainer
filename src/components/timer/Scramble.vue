@@ -4,6 +4,7 @@ import {useSessionStore} from "@/stores/SessionStore";
 import {useBluetoothCubeStore} from "@/stores/BluetoothCubeStore";
 import {computed} from "vue";
 import {useSettingsStore} from "@/stores/SettingsStore";
+import {moveFace, moveAmount} from "@/helpers/scramble_utils";
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 
@@ -13,16 +14,6 @@ const bt = useBluetoothCubeStore()
 const scramble = computed(() => session.currentScramble ?? t("timer.no_scramble"))
 
 const isTracking = computed(() => bt.connected && bt.phase !== 'idle')
-
-// Move arithmetic: convert move to quarter-turn count (mod 4)
-function moveAmount(m) {
-  if (m.endsWith("'")) return 3
-  if (m.endsWith("2")) return 2
-  return 1
-}
-function moveFace(m) {
-  return m[0]
-}
 function amountToMove(face, amount) {
   const a = ((amount % 4) + 4) % 4
   if (a === 0) return null

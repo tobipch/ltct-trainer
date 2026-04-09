@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia'
 import {ref} from 'vue'
-import {invertMove} from '@/helpers/scramble_utils'
+import {invertMove, moveFace, moveAmount} from '@/helpers/scramble_utils'
 import {useDisplayStore} from '@/stores/DisplayStore'
 
 let kpuzzlePromise = null
@@ -28,6 +28,7 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
     let infoSubscription = null
     let cubePattern = null
     let solvedPattern = null
+    let pendingHalfTurn = null // { face, firstMove, timeout }
 
     const connect = async () => {
         const display = useDisplayStore()
@@ -108,17 +109,33 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
         cubePattern = solvedPattern.applyAlg(scrambleString)
     }
 
+    const clearPendingHalfTurn = () => {
+        if (pendingHalfTurn) {
+            clearTimeout(pendingHalfTurn.timeout)
+            pendingHalfTurn = null
+        }
+    }
+
     const resetTracking = () => {
         phase.value = 'idle'
         scrambleMoves.value = []
         position.value = 0
         correctionMoves.value = []
+        clearPendingHalfTurn()
         cubePattern = null
         solvedPattern = null
     }
 
+    const advancePosition = () => {
+        position.value++
+        if (position.value >= scrambleMoves.value.length) {
+            phase.value = 'solving'
+        }
+    }
+
     const onMove = (move) => {
         if (phase.value === 'scrambling') {
+            // Priority 1: Corrections first
             if (correctionMoves.value.length > 0) {
                 const expected = correctionMoves.value[correctionMoves.value.length - 1]
                 if (move === expected) {
@@ -126,11 +143,49 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
                 } else {
                     correctionMoves.value.push(invertMove(move))
                 }
-            } else {
-                if (position.value < scrambleMoves.value.length && move === scrambleMoves.value[position.value]) {
-                    position.value++
-                    if (position.value >= scrambleMoves.value.length) {
-                        phase.value = 'solving'
+                return
+            }
+
+            // Priority 2: Pending half turn (waiting for second quarter of a double move)
+            if (pendingHalfTurn) {
+                clearTimeout(pendingHalfTurn.timeout)
+                const pending = pendingHalfTurn
+                pendingHalfTurn = null
+                const expected = scrambleMoves.value[position.value] // the "X2" move
+
+                if (moveFace(move) === pending.face) {
+                    const total = (moveAmount(pending.firstMove) + moveAmount(move)) % 4
+                    if (total === moveAmount(expected)) {
+                        // Completed the double move (L+L=L2 or L'+L'=L2)
+                        advancePosition()
+                    } else {
+                        // Same face but wrong total (e.g. L+L' cancels)
+                        correctionMoves.value.push(invertMove(pending.firstMove))
+                        correctionMoves.value.push(invertMove(move))
+                    }
+                } else {
+                    // Different face — first move was wrong, re-process second move
+                    correctionMoves.value.push(invertMove(pending.firstMove))
+                    onMove(move)
+                }
+                return
+            }
+
+            // Priority 3: Normal matching
+            if (position.value < scrambleMoves.value.length) {
+                const expected = scrambleMoves.value[position.value]
+                if (move === expected) {
+                    advancePosition()
+                } else if (expected.endsWith('2') && moveFace(move) === moveFace(expected)) {
+                    // First quarter of a potential double move
+                    pendingHalfTurn = {
+                        face: moveFace(move),
+                        firstMove: move,
+                        timeout: setTimeout(() => {
+                            // Timed out — treat single move as wrong
+                            pendingHalfTurn = null
+                            correctionMoves.value.push(invertMove(move))
+                        }, 500)
                     }
                 } else {
                     correctionMoves.value.push(invertMove(move))
