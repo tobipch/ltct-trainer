@@ -11,8 +11,11 @@
       "bluetooth_connect": "Collega smart cube",
       "bluetooth_disconnect": "Scollega smart cube",
       "bluetooth_pause": "Metti in pausa il tracciamento",
+      "bluetooth_pause_hint": "Ignora le mosse provenienti dallo smart cube. Utile quando devi sistemare il cubo senza influenzare l'avanzamento della miscela.",
       "bluetooth_resume": "Riprendi il tracciamento",
-      "bluetooth_reset_to_solved": "Reimposta il cubo virtuale su risolto"
+      "bluetooth_resume_hint": "Le mosse provenienti dallo smart cube vengono nuovamente registrate.",
+      "bluetooth_reset_to_solved": "Reimposta il cubo virtuale su risolto",
+      "bluetooth_reset_to_solved_hint": "Comunica al trainer che il cubo fisico è ora in stato risolto. Usalo se il cubo virtuale non è più sincronizzato con quello reale."
     },
     "select": {
       "select_intro": "Seleziona i casi da praticare",

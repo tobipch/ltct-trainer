@@ -11,8 +11,11 @@
       "bluetooth_connect": "Smart Cube verbinden",
       "bluetooth_disconnect": "Smart Cube trennen",
       "bluetooth_pause": "Tracking pausieren",
+      "bluetooth_pause_hint": "Züge des Smart Cubes werden ignoriert. Nützlich, wenn du den Würfel anpassen möchtest, ohne den Mischfortschritt zu beeinflussen.",
       "bluetooth_resume": "Tracking fortsetzen",
-      "bluetooth_reset_to_solved": "Virtuellen Würfel auf gelöst zurücksetzen"
+      "bluetooth_resume_hint": "Züge des Smart Cubes werden wieder registriert.",
+      "bluetooth_reset_to_solved": "Virtuellen Würfel auf gelöst zurücksetzen",
+      "bluetooth_reset_to_solved_hint": "Teile dem Trainer mit, dass dein physischer Würfel nun gelöst ist. Verwende dies, wenn der virtuelle Würfel nicht mehr mit dem echten übereinstimmt."
     },
     "select": {
       "select_intro": "Wähle Fälle zum Üben aus",

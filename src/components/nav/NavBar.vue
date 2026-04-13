@@ -91,23 +91,35 @@ const tinySelectBtnText = computed(() => {
           </svg>
           <span class="bt-battery-tooltip">{{ bt.battery }}%</span>
         </span>
-        <button
-            v-if="bt.connected"
-            class="btn"
-            tabindex="-1" @keydown.space.prevent=""
-            :class="bt.paused ? 'btn-warning' : 'btn-outline-secondary'"
-            @click="bt.paused ? bt.resumeTracking() : bt.pauseTracking()"
-            :title="bt.paused ? $t('nav.bluetooth_resume') : $t('nav.bluetooth_pause')">
-          <i :class="bt.paused ? 'bi-play-fill' : 'bi-pause-fill'"/>
-        </button>
-        <button
-            v-if="bt.connected"
-            class="btn btn-outline-secondary"
-            tabindex="-1" @keydown.space.prevent=""
-            @click="bt.resetToSolved()"
-            :title="$t('nav.bluetooth_reset_to_solved')">
-          <i class="bi-arrow-counterclockwise"/>
-        </button>
+        <span v-if="bt.connected" class="bt-feature-wrap" tabindex="0" @touchstart.prevent="">
+          <button
+              class="btn"
+              tabindex="-1" @keydown.space.prevent=""
+              :class="bt.paused ? 'btn-warning' : 'btn-outline-secondary'"
+              @click="bt.paused ? bt.resumeTracking() : bt.pauseTracking()">
+            <i :class="bt.paused ? 'bi-play-fill' : 'bi-pause-fill'"/>
+          </button>
+          <i class="bi-bluetooth bt-feature-badge"/>
+          <span class="bt-feature-tooltip">
+            <strong>{{ bt.paused ? $t('nav.bluetooth_resume') : $t('nav.bluetooth_pause') }}</strong>
+            <br>
+            {{ bt.paused ? $t('nav.bluetooth_resume_hint') : $t('nav.bluetooth_pause_hint') }}
+          </span>
+        </span>
+        <span v-if="bt.connected" class="bt-feature-wrap" tabindex="0" @touchstart.prevent="">
+          <button
+              class="btn btn-outline-secondary"
+              tabindex="-1" @keydown.space.prevent=""
+              @click="bt.resetToSolved()">
+            <i class="bi-arrow-counterclockwise"/>
+          </button>
+          <i class="bi-bluetooth bt-feature-badge"/>
+          <span class="bt-feature-tooltip">
+            <strong>{{ $t('nav.bluetooth_reset_to_solved') }}</strong>
+            <br>
+            {{ $t('nav.bluetooth_reset_to_solved_hint') }}
+          </span>
+        </span>
         <button
             class="btn"
             tabindex="-1" @keydown.space.prevent=""
@@ -155,6 +167,52 @@ const tinySelectBtnText = computed(() => {
 .bt-battery-wrap:hover .bt-battery-tooltip,
 .bt-battery-wrap:active .bt-battery-tooltip,
 .bt-battery-wrap:focus .bt-battery-tooltip {
+  display: block;
+}
+.bt-feature-wrap {
+  position: relative;
+  display: inline-flex;
+  outline: none;
+}
+.bt-feature-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--bs-info);
+  color: #fff;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  box-shadow: 0 0 0 1.5px var(--bs-body-bg);
+}
+.bt-feature-tooltip {
+  display: none;
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  max-width: 260px;
+  width: max-content;
+  padding: 6px 10px;
+  background: var(--bs-dark, #333);
+  color: var(--bs-light, #fff);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: normal;
+  line-height: 1.3;
+  white-space: normal;
+  text-align: left;
+  z-index: 1070;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+.bt-feature-wrap:hover .bt-feature-tooltip,
+.bt-feature-wrap:focus .bt-feature-tooltip,
+.bt-feature-wrap:focus-within .bt-feature-tooltip {
   display: block;
 }
 </style>
