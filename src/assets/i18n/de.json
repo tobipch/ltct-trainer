@@ -6,11 +6,13 @@
       "n_cases": "keine Fälle ausgewählt | ein Fall ausgewählt | {count} Fälle ausgewählt",
       "n_to_recap": "{count} zum Wiederholen",
       "language": "Sprache",
-      "add_translation": "Übersetzung hinzufügen",
       "settings": "Einstellungen",
       "toggle_night_mode": "Nachtmodus umschalten",
       "bluetooth_connect": "Smart Cube verbinden",
-      "bluetooth_disconnect": "Smart Cube trennen"
+      "bluetooth_disconnect": "Smart Cube trennen",
+      "bluetooth_pause": "Tracking pausieren",
+      "bluetooth_resume": "Tracking fortsetzen",
+      "bluetooth_reset_to_solved": "Virtuellen Würfel auf gelöst zurücksetzen"
     },
     "select": {
       "select_intro": "Wähle Fälle zum Üben aus",
@@ -22,6 +24,7 @@
     "presets": {
       "presets": "Voreinstellungen",
       "new_preset": "Neue Voreinstellung",
+      "edit_preset": "Voreinstellung bearbeiten",
       "name_example": "zum Lernen",
       "save_btn": "Speichern",
       "apply_btn": "Anwenden",

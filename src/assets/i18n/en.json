@@ -6,11 +6,13 @@
       "n_cases": "no cases selected | one case selected | {count} cases selected",
       "n_to_recap": "{count} to recap",
       "language": "Language",
-      "add_translation": "Add translation",
       "settings": "Settings",
       "toggle_night_mode": "Toggle night mode",
       "bluetooth_connect": "Connect smart cube",
-      "bluetooth_disconnect": "Disconnect smart cube"
+      "bluetooth_disconnect": "Disconnect smart cube",
+      "bluetooth_pause": "Pause tracking",
+      "bluetooth_resume": "Resume tracking",
+      "bluetooth_reset_to_solved": "Reset virtual cube to solved"
     },
     "select": {
       "select_intro": "Select cases to practise",

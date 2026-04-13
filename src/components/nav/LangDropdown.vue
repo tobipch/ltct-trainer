@@ -1,6 +1,6 @@
 <script setup>
 
-import {setLocaleAndReload, supportedLocales, addTranslationUrl} from "@/locale"
+import {setLocaleAndReload, supportedLocales} from "@/locale"
 
 </script>
 
@@ -20,11 +20,6 @@ import {setLocaleAndReload, supportedLocales, addTranslationUrl} from "@/locale"
       <li v-for="locale in supportedLocales" :key="locale.code">
         <a class="dropdown-item clickable" @click="setLocaleAndReload(locale.code)">
           {{locale.emoji}} {{locale.name}}
-        </a>
-      </li>
-      <li>
-        <a class="dropdown-item" :href="addTranslationUrl" target="_blank">
-          ➕ {{$t("nav.add_translation")}}
         </a>
       </li>
     </ul>

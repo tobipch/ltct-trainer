@@ -29,6 +29,9 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
     // { face: string, accumulated: number (quarter turns mod 4), moves: string[] }
     const pendingFaceTurn = ref(null)
 
+    // Paused: when true, incoming cube moves are ignored
+    const paused = ref(false)
+
     // Internal (not exposed)
     let cube = null
     let moveSubscription = null
@@ -123,8 +126,28 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
         position.value = 0
         correctionMoves.value = []
         pendingFaceTurn.value = null
+        paused.value = false
         cubePattern = null
         solvedPattern = null
+    }
+
+    const pauseTracking = () => { paused.value = true }
+    const resumeTracking = () => { paused.value = false }
+
+    // Reset the virtual cube to its solved state and restart scramble tracking
+    // from the beginning. Useful after the user did random moves (e.g. while paused)
+    // and manually solved the cube again.
+    const resetToSolved = async () => {
+        const kpuzzle = await getKPuzzle()
+        solvedPattern = kpuzzle.defaultPattern()
+        cubePattern = solvedPattern
+        position.value = 0
+        correctionMoves.value = []
+        pendingFaceTurn.value = null
+        paused.value = false
+        if (scrambleMoves.value.length > 0) {
+            phase.value = 'scrambling'
+        }
     }
 
     const advancePosition = () => {
@@ -135,6 +158,8 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
     }
 
     const onMove = (rawMove) => {
+        if (paused.value) return
+
         // Track physical cube state for solved detection (always in standard frame)
         if (cubePattern) {
             try { cubePattern = cubePattern.applyMove(rawMove) } catch (_) {}
@@ -317,8 +342,9 @@ export const useBluetoothCubeStore = defineStore('bluetoothCube', () => {
 
     return {
         connected, deviceName, battery,
-        phase, scrambleMoves, position, correctionMoves, pendingFaceTurn,
-        connect, disconnect, startTracking, resetTracking, _getInternals
+        phase, scrambleMoves, position, correctionMoves, pendingFaceTurn, paused,
+        connect, disconnect, startTracking, resetTracking,
+        pauseTracking, resumeTracking, resetToSolved, _getInternals
     }
 })
 

@@ -92,6 +92,23 @@ const tinySelectBtnText = computed(() => {
           <span class="bt-battery-tooltip">{{ bt.battery }}%</span>
         </span>
         <button
+            v-if="bt.connected"
+            class="btn"
+            tabindex="-1" @keydown.space.prevent=""
+            :class="bt.paused ? 'btn-warning' : 'btn-outline-secondary'"
+            @click="bt.paused ? bt.resumeTracking() : bt.pauseTracking()"
+            :title="bt.paused ? $t('nav.bluetooth_resume') : $t('nav.bluetooth_pause')">
+          <i :class="bt.paused ? 'bi-play-fill' : 'bi-pause-fill'"/>
+        </button>
+        <button
+            v-if="bt.connected"
+            class="btn btn-outline-secondary"
+            tabindex="-1" @keydown.space.prevent=""
+            @click="bt.resetToSolved()"
+            :title="$t('nav.bluetooth_reset_to_solved')">
+          <i class="bi-arrow-counterclockwise"/>
+        </button>
+        <button
             class="btn"
             tabindex="-1" @keydown.space.prevent=""
             :class="settingsBtnClass"

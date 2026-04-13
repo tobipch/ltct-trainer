@@ -126,10 +126,19 @@ export const useSessionStore = defineStore('session', () => {
 
     const setSelectedKeys = (keys) => {
         timerState.value = TimerState.NOT_RUNNING
+        // Only reset recap/counts when the selection actually changed. This
+        // preserves recap progress across page reloads, since App.vue calls
+        // this on every boot.
+        const sameKeys = keys.length === store.keys.length
+            && keys.every(k => store.keys.includes(k))
+        if (sameKeys) {
+            if (!store.currentScramble) setRandomCase()
+            return
+        }
         store.recapMode = false
         store.keys = keys
         recentCases.value = []
-        resetKeysCount() // TODO maybe don't reset every time
+        resetKeysCount()
         setRandomCase()
     }
 
