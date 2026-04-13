@@ -11,11 +11,8 @@
       "bluetooth_connect": "Connecter le smart cube",
       "bluetooth_disconnect": "Déconnecter le smart cube",
       "bluetooth_pause": "Mettre en pause le suivi",
-      "bluetooth_pause_hint": "Ignorer les mouvements provenant du smart cube. Utile lorsque vous devez ajuster le cube sans affecter la progression du mélange.",
       "bluetooth_resume": "Reprendre le suivi",
-      "bluetooth_resume_hint": "Les mouvements du smart cube sont à nouveau pris en compte.",
-      "bluetooth_reset_to_solved": "Réinitialiser le cube virtuel à l'état résolu",
-      "bluetooth_reset_to_solved_hint": "Indiquer au trainer que votre cube physique est désormais résolu. Utilisez ceci si le cube virtuel n'est plus synchronisé avec le cube réel."
+      "bluetooth_reset_to_solved": "Réinitialiser le cube virtuel à l'état résolu"
     },
     "select": {
       "select_intro": "Sélectionnez les cas à pratiquer",
@@ -124,6 +121,8 @@
       "recap": "Commencer à revoir tous les cas sélectionnés",
       "add_to_starred": "Ajouter le cas sélectionné aux préréglages favoris",
       "didnt_know": "Marquer le cas actuel comme inconnu",
+      "bluetooth_pause_toggle": "Mettre en pause / reprendre le suivi du smart cube",
+      "bluetooth_reset_to_solved": "Réinitialiser le cube virtuel à l'état résolu",
       "navigate": "Accéder au résultat précédent / suivant / premier / dernier dans les statistiques"
     },
     "contact": {

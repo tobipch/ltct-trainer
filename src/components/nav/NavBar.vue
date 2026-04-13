@@ -4,7 +4,7 @@ import ThemeSwitcher from "@/components/nav/ThemeSwitcher.vue";
 import {useSelectedStore} from "@/stores/SelectedStore";
 import {useDisplayStore} from "@/stores/DisplayStore";
 import {useRouter, useRoute} from "vue-router";
-import {computed} from "vue";
+import {computed, onMounted, onUnmounted} from "vue";
 import {useSessionStore} from "@/stores/SessionStore";
 import {useBluetoothCubeStore} from "@/stores/BluetoothCubeStore";
 import {useI18n} from 'vue-i18n'
@@ -31,6 +31,19 @@ const tinySelectBtnText = computed(() => {
       ? (session.casesWithZeroCount.length + '/' + selected.totalZbllsSelected())
       : selected.totalZbllsSelected()
 })
+
+const onGlobalKeyDown = (e) => {
+  if (!e.altKey || !bt.connected) return
+  if (e.key === 'y' || e.key === 'Y') {
+    bt.paused ? bt.resumeTracking() : bt.pauseTracking()
+    e.preventDefault()
+  } else if (e.key === 'm' || e.key === 'M') {
+    bt.resetToSolved()
+    e.preventDefault()
+  }
+}
+onMounted(() => window.addEventListener('keydown', onGlobalKeyDown))
+onUnmounted(() => window.removeEventListener('keydown', onGlobalKeyDown))
 </script>
 
 <template>
@@ -100,11 +113,7 @@ const tinySelectBtnText = computed(() => {
             <i :class="bt.paused ? 'bi-play-fill' : 'bi-pause-fill'"/>
           </button>
           <i class="bi-bluetooth bt-feature-badge"/>
-          <span class="bt-feature-tooltip">
-            <strong>{{ bt.paused ? $t('nav.bluetooth_resume') : $t('nav.bluetooth_pause') }}</strong>
-            <br>
-            {{ bt.paused ? $t('nav.bluetooth_resume_hint') : $t('nav.bluetooth_pause_hint') }}
-          </span>
+          <span class="bt-feature-tooltip">{{ bt.paused ? $t('nav.bluetooth_resume') : $t('nav.bluetooth_pause') }}</span>
         </span>
         <span v-if="bt.connected" class="bt-feature-wrap" tabindex="0" @touchstart.prevent="">
           <button
@@ -114,11 +123,7 @@ const tinySelectBtnText = computed(() => {
             <i class="bi-arrow-counterclockwise"/>
           </button>
           <i class="bi-bluetooth bt-feature-badge"/>
-          <span class="bt-feature-tooltip">
-            <strong>{{ $t('nav.bluetooth_reset_to_solved') }}</strong>
-            <br>
-            {{ $t('nav.bluetooth_reset_to_solved_hint') }}
-          </span>
+          <span class="bt-feature-tooltip">{{ $t('nav.bluetooth_reset_to_solved') }}</span>
         </span>
         <button
             class="btn"
@@ -194,21 +199,16 @@ const tinySelectBtnText = computed(() => {
   display: none;
   position: absolute;
   top: calc(100% + 6px);
-  right: 0;
-  max-width: 260px;
-  width: max-content;
-  padding: 6px 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 8px;
   background: var(--bs-dark, #333);
   color: var(--bs-light, #fff);
   border-radius: 4px;
-  font-size: 0.8rem;
-  font-weight: normal;
-  line-height: 1.3;
-  white-space: normal;
-  text-align: left;
+  font-size: 0.75rem;
+  white-space: nowrap;
   z-index: 1070;
   pointer-events: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
 }
 .bt-feature-wrap:hover .bt-feature-tooltip,
 .bt-feature-wrap:focus .bt-feature-tooltip,

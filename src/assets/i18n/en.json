@@ -11,11 +11,8 @@
       "bluetooth_connect": "Connect smart cube",
       "bluetooth_disconnect": "Disconnect smart cube",
       "bluetooth_pause": "Pause tracking",
-      "bluetooth_pause_hint": "Stop reacting to moves from the smart cube. Useful when you need to adjust the cube without affecting your scramble progress.",
       "bluetooth_resume": "Resume tracking",
-      "bluetooth_resume_hint": "Start reacting to moves from the smart cube again.",
-      "bluetooth_reset_to_solved": "Reset virtual cube to solved",
-      "bluetooth_reset_to_solved_hint": "Tell the trainer that your physical cube is now in its solved state. Use this if the virtual cube got out of sync with the real one."
+      "bluetooth_reset_to_solved": "Reset virtual cube to solved"
     },
     "select": {
       "select_intro": "Select cases to practise",
@@ -124,6 +121,8 @@
       "recap": "Start recap all selected cases",
       "add_to_starred": "Add selected case to starred preset",
       "didnt_know": "Mark current case as didn't know",
+      "bluetooth_pause_toggle": "Pause / resume smart cube tracking",
+      "bluetooth_reset_to_solved": "Reset virtual cube to solved",
       "navigate": "Navigate to prev/next/first/last result in stats"
     },
     "contact": {
